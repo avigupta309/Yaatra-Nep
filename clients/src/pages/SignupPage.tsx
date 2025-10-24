@@ -1,14 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { Bus, Eye, EyeOff, UserPlus } from "lucide-react";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
 
 interface SignupFormData {
-  name: string;
+  fullName: string;
   email: string;
-  phone: string;
+  phoneNumber: string;
   password: string;
   confirmPassword: string;
+}
+
+interface usersignupProps {
+  data: string;
+  user: { email: string; fullName: string };
 }
 
 export const SignupPage: React.FC = () => {
@@ -20,20 +27,45 @@ export const SignupPage: React.FC = () => {
     reset,
   } = useForm<SignupFormData>();
 
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [userSignup, setUserSignUp] = useState<usersignupProps>();
+  const navigate = useNavigate();
 
   const onSubmit = async (data: SignupFormData) => {
-    console.log("Signup Data:", data);
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/user/usersignup",
+        data
+      );
 
-    // simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+      console.log(response);
+      setUserSignUp(response.data);
 
-    alert("✅ Account created successfully!");
-    reset();
-    navigate("/");
+      if (response.status === 409) {
+        toast.info(response.data.data || "Email already exists.");
+      }
+      if (response.status == 400) {
+        toast.error(response.data.data || "Invalid input.");
+      }
+      // eslint-disable-next-line
+    } catch (error: any) {
+      console.error("Signup error:", error);
+      toast.error(error.response?.data?.data || "Server error during signup.");
+    }
   };
+
+  useEffect(() => {
+    if (userSignup) {
+      toast.success(`${userSignup.data} mr/ms :${userSignup.user.fullName}`);
+      reset();
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
+    }
+    // eslint-disable-next-line
+  }, [userSignup]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center px-4 py-8">
@@ -47,9 +79,7 @@ export const SignupPage: React.FC = () => {
             <Bus className="h-10 w-10" />
             <span className="text-3xl font-bold">SmartBus</span>
           </Link>
-          <p className="text-gray-600 mt-2">
-            Start your journey with us
-          </p>
+          <p className="text-gray-600 mt-2">Start your journey with us</p>
         </div>
 
         {/* Signup Card */}
@@ -68,16 +98,19 @@ export const SignupPage: React.FC = () => {
                 Full Name
               </label>
               <input
-                {...register("name", {
+                {...register("fullName", {
                   required: "Name is required",
-                  minLength: { value: 2, message: "Name must be at least 2 characters" },
+                  minLength: {
+                    value: 2,
+                    message: "Name must be at least 2 characters",
+                  },
                 })}
                 placeholder="Enter your full name"
                 className="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
               />
-              {errors.name && (
+              {errors.fullName && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.name.message}
+                  {errors.fullName.message}
                 </p>
               )}
             </div>
@@ -97,6 +130,7 @@ export const SignupPage: React.FC = () => {
                   },
                 })}
                 placeholder="Enter your email"
+                autoComplete="email"
                 className="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
               />
               {errors.email && (
@@ -113,7 +147,7 @@ export const SignupPage: React.FC = () => {
               </label>
               <input
                 type="tel"
-                {...register("phone", {
+                {...register("phoneNumber", {
                   required: "Phone number is required",
                   pattern: {
                     value: /^[0-9]{10,}$/,
@@ -123,9 +157,9 @@ export const SignupPage: React.FC = () => {
                 placeholder="Enter your phone number"
                 className="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
               />
-              {errors.phone && (
+              {errors.phoneNumber && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.phone.message}
+                  {errors.phoneNumber.message}
                 </p>
               )}
             </div>
@@ -146,6 +180,7 @@ export const SignupPage: React.FC = () => {
                     },
                   })}
                   placeholder="Create a password"
+                  autoComplete="password"
                   className="w-full border rounded-lg px-4 py-3 pr-10 focus:ring-2 focus:ring-blue-500 outline-none"
                 />
                 <button
@@ -177,16 +212,19 @@ export const SignupPage: React.FC = () => {
                       value === watch("password") || "Passwords do not match",
                   })}
                   placeholder="Confirm your password"
+                  autoComplete="password"
                   className="w-full border rounded-lg px-4 py-3 pr-10 focus:ring-2 focus:ring-blue-500 outline-none"
                 />
                 <button
                   type="button"
-                  onClick={() =>
-                    setShowConfirmPassword(!showConfirmPassword)
-                  }
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-3 text-gray-500"
                 >
-                  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showConfirmPassword ? (
+                    <EyeOff size={18} />
+                  ) : (
+                    <Eye size={18} />
+                  )}
                 </button>
               </div>
               {errors.confirmPassword && (
@@ -228,6 +266,7 @@ export const SignupPage: React.FC = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

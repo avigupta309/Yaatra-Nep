@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { Bus, Eye, EyeOff, LogIn } from "lucide-react";
-
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 interface LoginFormData {
   email: string;
   password: string;
+}
+
+interface userLoginProps {
+  data: string;
+  user: { fullName: string; email: string };
 }
 
 export const LoginPage: React.FC = () => {
@@ -16,21 +22,32 @@ export const LoginPage: React.FC = () => {
   } = useForm<LoginFormData>();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [user, setUser] = useState<userLoginProps>();
   const navigate = useNavigate();
 
   const onSubmit = async (data: LoginFormData) => {
-    console.log("Login Data:", data);
-
-    // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    if (data.email === "john@example.com" && data.password === "password") {
-      alert("✅ Login successful! Welcome back.");
-      navigate("/");
-    } else {
-      alert("❌ Invalid credentials. Try john@example.com / password");
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/user/userlogin",
+        data,
+        { withCredentials: true }
+      );
+      setUser(response.data);
+      // eslint-disable-next-line
+    } catch (error: any) {
+      toast.error(error?.response.data.data || "wrong password");
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      toast.success(`${user?.data} mr/ms ${user?.user.fullName}`);
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    }
+    //eslint-disable-next-line
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center px-4">
@@ -65,6 +82,7 @@ export const LoginPage: React.FC = () => {
               <input
                 type="email"
                 placeholder="Enter your email"
+                autoComplete="email"
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
@@ -90,11 +108,12 @@ export const LoginPage: React.FC = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
+                  autoComplete="current-password"
                   {...register("password", {
                     required: "Password is required",
                     minLength: {
-                      value: 6,
-                      message: "Password must be at least 6 characters",
+                      value: 3,
+                      message: "Password must be at least 3 characters",
                     },
                   })}
                   className="w-full border rounded-lg px-4 py-3 pr-10 focus:ring-2 focus:ring-blue-500 outline-none"
@@ -146,19 +165,9 @@ export const LoginPage: React.FC = () => {
               </Link>
             </p>
           </div>
-
-          {/* Demo Credentials */}
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-100">
-            <p className="text-sm font-medium text-gray-700 mb-2">
-              Demo Credentials:
-            </p>
-            <div className="text-xs text-gray-600 space-y-1">
-              <p>User: john@example.com / password</p>
-              <p>Admin: admin@busbook.com / admin</p>
-            </div>
-          </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

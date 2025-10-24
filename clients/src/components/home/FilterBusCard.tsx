@@ -10,22 +10,12 @@ import {
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
 import { Badge } from "../../components/ui/badge";
-import { Bus } from "../../types";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "axios";
-export function BusCard() {
-  const [bus, setBus] = useState<Bus[]>([]);
-  useEffect(() => {
-    async function fetchingData() {
-      const response = await axios.get("http://localhost:3000/api/bus/viewbus");
-      if (response) {
-        setBus(response.data.bus);
-      }
-    }
-    fetchingData();
-  }, []);
-
+import { Bus, BusInfo } from "../../types";
+interface busProps {
+  searchResults: BusInfo[] | Bus[];
+}
+export function FilterBusCard({ searchResults }: busProps) {
   const getAmenityIcon = (amenity: string) => {
     switch (amenity.toLowerCase()) {
       case "wi-fi":
@@ -41,11 +31,10 @@ export function BusCard() {
     }
   };
 
-
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200">
       <CardContent className="p-2 ">
-        {bus.map((bus, index) => {
+        {searchResults.map((bus, index) => {
           return (
             <div
               key={index}
@@ -99,7 +88,7 @@ export function BusCard() {
 
                 {/* Amenities */}
                 <div className="flex flex-wrap gap-2 mb-3">
-                  {bus.amenities.slice(0, 4).map((amenity, index) => (
+                  {/* {searchResults.amenities.slice(0, 4).map((amenity, index) => (
                     <div
                       key={index}
                       className="flex items-center space-x-1 text-xs text-gray-600 bg-gray-50 px-2 py-1 rounded"
@@ -107,7 +96,18 @@ export function BusCard() {
                       {getAmenityIcon(amenity)}
                       <span>{amenity}</span>
                     </div>
-                  ))}
+                  ))} */}
+                  {bus.amenities.slice(0, 4).map((amenity, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="flex items-center space-x-1 text-xs text-gray-600 bg-gray-50 px-2 py-1 rounded"
+                      >
+                        {getAmenityIcon(amenity)}
+                        <span>{amenity}</span>
+                      </div>
+                    );
+                  })}
 
                   {bus.amenities.length > 4 && (
                     <div className="text-xs text-gray-500 mt-1">

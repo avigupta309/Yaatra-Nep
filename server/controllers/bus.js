@@ -27,11 +27,13 @@ export async function HandleBusSubmitData(req, res) {
 
     const driverDocs = await DriverModel.findOne({ email: busDriver })
     if (!driverDocs) return res.status(400).json({ data: "Enter Valid Driver Email" })
-    busDriver = driverDocs._id
+    busDriver = driverDocs._id // to populate in driver through bus of driverId
     try {
         await BusModel.create({
             busName, busNumber, type, source, destination, departureTime, arrivalTime, farePerSeat, totalSeats, availableSeats, amenities, operator, busDriver
         })
+        console.log(source, destination)
+
 
         return res.status(201).json({ data: `${busName}'s :${busNumber} data added Sucessfully` })
     } catch (error) {
@@ -86,6 +88,7 @@ export async function HandleBusEdit(req, res) {
     const driverDocs = await DriverModel.findOne({ email: busDriver })
     if (!driverDocs) return res.status(401).json({ data: "Enter valid Driver Email" })
     busDriver = driverDocs._id
+
     try {
         const updatedData = await BusModel.findOneAndUpdate({ busNumber }, {
             busName,
@@ -119,3 +122,4 @@ export async function ViewAllBus(req, res) {
         return res.status(404).json({ data: "Something Went Wrong During loading all bus" })
     }
 }
+

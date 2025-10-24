@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./hooks/useAuth";
+// import { AuthProvider } from "./hooks/useAuth";
 import { Header } from "./components/layout/Header";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
@@ -11,7 +11,7 @@ import AboutPage from "./pages/AboutPage";
 
 function App() {
   return (
-    <AuthProvider>
+    // <AuthProvider>
       <Router>
         <div className="min-h-screen bg-gray-50">
           <Header />
@@ -28,7 +28,7 @@ function App() {
           </main>
         </div>
       </Router>
-    </AuthProvider>
+    // </AuthProvider>
   );
 }
 

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BusHeader } from "../components/layout/BusLayout/BusHeader";
-import { busDetails } from "../types";
 import { BusExterior } from "../components/layout/BusLayout/BusExterior";
-
+import type { BusInfo } from "../types";
 import { BusInterior } from "../components/layout/BusLayout/BusInterior";
 import { AnimatedDriver } from "../components/layout/BusLayout/AnimatedDriver";
 import { BusStructure } from "../components/layout/BusLayout/BusStructure";
@@ -11,25 +10,29 @@ import Map from "../components/Map/Map";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 const SelectionBus: React.FC = () => {
+  const [busFeatures, setBusFeatures] = useState<BusInfo | null>(null);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const { id } = useParams<{ id: string }>();
   useEffect(() => {
     async function FetchingCityDetails() {
       try {
-        const response = await axios.get(`http://localhost:3000/api/bus/${id}`);
-        console.log(response);
+        const response = await axios.get(
+          `http://localhost:3000/api/bus/specificbus/${id}`
+        );
+        console.log(response.data.bus)
+        setBusFeatures(response.data.bus);
       } catch (error) {
-        console.log((error as Error).message)
+        console.log((error as Error).message);
       }
     }
     FetchingCityDetails();
-  }, []);
+  }, [id]);
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="max-w-6xl mx-auto">
         {/* Header Section */}
         <BusHeader
-          busDetails={busDetails}
+          busFeatures={busFeatures}
           setShowInfoModal={setShowInfoModal}
         />
 
@@ -38,13 +41,13 @@ const SelectionBus: React.FC = () => {
           {/* Bus Images Section */}
           <div className="space-y-4">
             {/* Bus Exterior */}
-            <BusExterior busDetails={busDetails} />
+            <BusExterior busFeatures={busFeatures} />
 
             {/* Bus Interior */}
             <BusInterior />
 
             {/* Animated Driver */}
-            <AnimatedDriver busDetails={busDetails} />
+            <AnimatedDriver busFeatures={busFeatures} />
           </div>
 
           {/* Seat Selection Section */}
@@ -72,11 +75,11 @@ const SelectionBus: React.FC = () => {
 
         {/* Info Modal */}
         <BusModal
-          busDetails={busDetails}
+          busFeatures={busFeatures}
           showInfoModal={showInfoModal}
           setShowInfoModal={setShowInfoModal}
         />
-        <Map />
+        <Map busFeatures={busFeatures}  />
       </div>
     </div>
   );

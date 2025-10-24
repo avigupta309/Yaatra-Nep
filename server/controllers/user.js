@@ -4,8 +4,9 @@ import { createHmac, randomBytes } from 'crypto'
 
 export async function HandleUserSignUp(req, res) {
     const { fullName, email, phoneNumber, password } = req.body;
+    console.log(fullName, email, phoneNumber, password)
     const isUserExist = await userModel.findOne({ email: email })
-    if (isUserExist) return res.status(400).json({ data: "Email is already Exist" })
+    if (isUserExist) return res.status(409).json({ data: "Email is already Exist" })
     try {
         await userModel.create({
             fullName,
@@ -15,7 +16,8 @@ export async function HandleUserSignUp(req, res) {
         })
         return res.status(201).json({ data: "SignUp Sucessfully ", user: { fullName: fullName, email: email } })
     } catch (error) {
-        return res.status(400).json({ data: "Cannot Signup the user !" })
+        console.log("cannot signup", error.message)
+        return res.status(400).json({ data: "Cannot Signup the user or check your number!" })
     }
 }
 
@@ -25,12 +27,12 @@ export async function HandleUserLogin(req, res) {
     const user = await userModel.findOne({ email: email })
     if (!user) return res.status(404).json({ data: "Email is Not registred" })
     try {
-        const validUser = await user.matchPassword(password)
-        const token = createToken(validUser)
+        const isMatchPassword = await user.matchPassword(password)
+        const token = createToken(isMatchPassword)
         res.cookie("tokenId", token, { httpOnly: true })
         return res.status(200).json({ data: "SignIn Sucessfully ", user: { fullName: user.fullName, email: user.email } })
     } catch (error) {
-        return res.status(400).json({ data: "Wrong password" })
+        return res.status(401).json({ data: "Password not match..." })
     }
 }
 

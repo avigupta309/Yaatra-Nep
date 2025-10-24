@@ -1,18 +1,18 @@
-import { BusFeatures } from "../../../types";
+import {  BusInfo } from "../../../types";
 
 interface BusHeaderProps {
-    busDetails: BusFeatures;
+    busFeatures: BusInfo|null;
     setShowInfoModal: (show: boolean) => void;
 }
 
-const BusHeader = ({ busDetails, setShowInfoModal }: BusHeaderProps) => {
+const BusHeader = ({ busFeatures, setShowInfoModal }: BusHeaderProps) => {
 
   return (
     <div>
       <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-            🚌 {busDetails.source} → {busDetails.destination}
+            🚌 {busFeatures?.source} → {busFeatures?.destination}
           </h1>
           <button
             onClick={() => setShowInfoModal(true)}

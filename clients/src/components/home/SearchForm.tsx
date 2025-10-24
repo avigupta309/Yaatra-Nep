@@ -4,21 +4,22 @@ import { ArrowLeftRight, MapPin, Search } from "lucide-react";
 import { SearchFilters } from "../../types";
 import { DisplayDate } from "../layout/DisplayDate";
 import axios from "axios";
+import { useCookies } from "react-cookie";
 
-interface SearchFormProps {
-  onSearch: (filters: SearchFilters) => void;
-}
-
-
+// interface SearchFormProps {
+//   onSearch: (filters: SearchFilters) => void;
+// }
 
 interface FormValues {
   source: string;
   destination: string;
-  busType?: "AC" | "Non-AC";
+  type?: "AC" | "Non-AC";
 }
 
-export function SearchForm({ onSearch }: SearchFormProps) {
+// export function SearchForm({ onSearch }: SearchFormProps) {
+export function SearchForm(){
   const [isSwapping, setIsSwapping] = useState(false);
+  const [, setCookies] = useCookies(["busData"]);
   const [city, setCity] = useState<string[]>([]);
   const {
     register,
@@ -30,7 +31,7 @@ export function SearchForm({ onSearch }: SearchFormProps) {
     defaultValues: {
       source: "",
       destination: "",
-      busType: undefined,
+      type: undefined,
     },
   });
 
@@ -40,8 +41,8 @@ export function SearchForm({ onSearch }: SearchFormProps) {
         const response = await axios.get(
           "http://localhost:3000/api/city/viewcity"
         );
-        setCity(response.data.city[0].cityName)
-        console.log(response.data.city)
+        setCity(response.data.city[0].cityName);
+        console.log(response.data.city);
       } catch (error) {
         console.log((error as Error).message);
       }
@@ -63,10 +64,12 @@ export function SearchForm({ onSearch }: SearchFormProps) {
     const searchFilters: SearchFilters = {
       source: values.source,
       destination: values.destination,
-      busType: values.busType,
+      type: values.type,
+      updateAt:Date.now()
     };
-    onSearch(searchFilters);
-    console.log(values);
+    // onSearch(searchFilters);
+    console.log(searchFilters);
+    setCookies("busData", searchFilters, { path: "/" });
   };
 
   return (
@@ -83,7 +86,7 @@ export function SearchForm({ onSearch }: SearchFormProps) {
                 className="w-full h-12 pl-10 pr-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-gray-700 bg-gray-50"
               >
                 <option value="">Select departure</option>
-                {city.map((city,i) => (
+                {city.map((city, i) => (
                   <option key={i} value={city}>
                     {city}
                   </option>
@@ -127,7 +130,7 @@ export function SearchForm({ onSearch }: SearchFormProps) {
                 >
                   Select destination
                 </option>
-                {city.map((city,index) => (
+                {city.map((city, index) => (
                   <option key={index} value={city} className="cursor-pointer">
                     {city}
                   </option>
@@ -160,7 +163,7 @@ export function SearchForm({ onSearch }: SearchFormProps) {
             Bus Type
           </label>
           <select
-            {...register("busType")}
+            {...register("type")}
             className="w-full md:w-48 mt-1 h-11 pl-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50"
           >
             <option value="">All bus types</option>

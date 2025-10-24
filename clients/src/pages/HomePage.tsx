@@ -1,35 +1,36 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { SearchForm } from "../components/home/SearchForm";
 import { BusCard } from "../components/home/BusCard";
-import { mockBuses } from "../data/mockData";
-import { Bus, SearchFilters } from "../types";
-import { MapPin } from "lucide-react";
+// import { mockBuses } from "../data/mockData";
+// import { Bus, SearchFilters } from "../types";
+// import { MapPin } from "lucide-react";
 import Feature from "../components/home/Feature";
+import FilterBus from "../components/layout/FilterBus";
 
 export function HomePage() {
-  const [searchResults, setSearchResults] = useState<Bus[]>([]);
-  const [searchFilters, setSearchFilters] = useState<SearchFilters | null>(
-    null
-  );
-  const [isSearched, setIsSearched] = useState(false);
+  // const [, setSearchResults] = useState<Bus[]>([]);
+  // const [, setSearchFilters] = useState<SearchFilters | null>(
+  //   null
+  // );
+  // const [, setIsSearched] = useState(false);
 
-  const handleSearch = (filters: SearchFilters) => {
-    setSearchFilters(filters);
-    setIsSearched(true);
+  // const handleSearch = (filters: SearchFilters) => {
+  //   setSearchFilters(filters);
+  //   setIsSearched(true);
 
-    const filteredBuses = mockBuses.filter((bus) => {
-      const matchesRoute =
-        bus.source.toLowerCase().includes(filters.source.toLowerCase()) &&
-        bus.destination
-          .toLowerCase()
-          .includes(filters.destination.toLowerCase());
-      const matchesType = !filters.busType || bus.type === filters.busType;
+  //   const filteredBuses = mockBuses.filter((bus) => {
+  //     const matchesRoute =
+  //       bus.source.toLowerCase().includes(filters.source.toLowerCase()) &&
+  //       bus.destination
+  //         .toLowerCase()
+  //         .includes(filters.destination.toLowerCase());
+  //     const matchesType = !filters.type || bus.type === filters.type;
 
-      return matchesRoute && matchesType;
-    });
+  //     return matchesRoute && matchesType;
+  //   });
 
-    setSearchResults(filteredBuses);
-  };
+  //   setSearchResults(filteredBuses);
+  // };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
@@ -48,57 +49,14 @@ export function HomePage() {
           </div>
 
           <div className="mb-16">
-            <SearchForm onSearch={handleSearch} />
+            {/* <SearchForm onSearch={handleSearch} /> */}
+            <SearchForm/>
           </div>
         </div>
       </section>
 
       {/* Search Results */}
-      {isSearched && (
-        <section className="py-8 px-4">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">
-                Available Buses
-                {searchFilters && (
-                  <span className="text-lg font-normal text-gray-600 ml-2">
-                    {searchFilters.source} → {searchFilters.destination}
-                  </span>
-                )}
-              </h2>
-              <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
-                {searchResults.length} buses found
-              </span>
-            </div>
-
-            {searchResults.length > 0 ? (
-              <div className="space-y-4">
-                {/* {searchResults.map((bus) => (
-                  <BusCard key={bus.id} bus={bus} />
-                ))} */}
-                <h1 className="text-2xl">Search Bus is here include logic</h1>
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <MapPin className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  No buses found
-                </h3>
-                <p className="text-gray-600 mb-6">
-                  Try searching for a different route or date
-                </p>
-                <button
-                  onClick={() => setIsSearched(false)}
-                  className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition"
-                >
-                  Search Again
-                </button>
-              </div>
-            )}
-          </div>
-        </section>
-      )}
-
+      <FilterBus />
       {/* Featured Buses Section */}
 
       <section className="py-16 px-4 bg-white">

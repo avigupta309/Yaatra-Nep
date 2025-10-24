@@ -1,11 +1,15 @@
-import { BusFeatures } from "../../../types";
+import { BusInfo } from "../../../types";
 
 interface BusModalProps {
-  busDetails: BusFeatures;
+  busFeatures: BusInfo | null;
   showInfoModal: boolean;
   setShowInfoModal: (show: boolean) => void;
 }
-const BusModal = ({ busDetails, showInfoModal ,setShowInfoModal}: BusModalProps) => {
+const BusModal = ({
+  busFeatures,
+  showInfoModal,
+  setShowInfoModal,
+}: BusModalProps) => {
   return (
     <div>
       {showInfoModal && (
@@ -31,7 +35,10 @@ const BusModal = ({ busDetails, showInfoModal ,setShowInfoModal}: BusModalProps)
                     <div>
                       <p className="text-sm font-medium">Driver</p>
                       <p className="text-sm text-gray-600">
-                        {busDetails.driverName}
+                        {busFeatures?.busDriver.driverName}
+                      </p>
+                      <p className="text-sm text-gray-500 relative ">
+                        {busFeatures?.busDriver.email}
                       </p>
                     </div>
                   </div>
@@ -40,7 +47,7 @@ const BusModal = ({ busDetails, showInfoModal ,setShowInfoModal}: BusModalProps)
                     <div>
                       <p className="text-sm font-medium">Bus Number</p>
                       <p className="text-sm text-gray-600">
-                        {busDetails.busNumber}
+                        {busFeatures?.busNumber}
                       </p>
                     </div>
                   </div>
@@ -49,7 +56,7 @@ const BusModal = ({ busDetails, showInfoModal ,setShowInfoModal}: BusModalProps)
                     <div>
                       <p className="text-sm font-medium">Color</p>
                       <p className="text-sm text-gray-600">
-                        {busDetails.busColor}
+                        {busFeatures?.busColor || "black & white"}
                       </p>
                     </div>
                   </div>
@@ -58,9 +65,16 @@ const BusModal = ({ busDetails, showInfoModal ,setShowInfoModal}: BusModalProps)
                     <div>
                       <p className="text-sm font-medium">Total Seats</p>
                       <p className="text-sm text-gray-600">
-                        {busDetails.totalSeats}
+                        {busFeatures?.totalSeats}
                       </p>
                     </div>
+                  </div>
+                  <div>
+                    💺
+                    <p className="text-sm font-medium">Available Seats</p>
+                    <p className="text-sm text-gray-600">
+                      {busFeatures?.availableSeats}
+                    </p>
                   </div>
                 </div>
 
@@ -69,18 +83,18 @@ const BusModal = ({ busDetails, showInfoModal ,setShowInfoModal}: BusModalProps)
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
                     📍 <span className="text-sm font-medium">Source:</span>
-                    <span className="text-sm">{busDetails.source}</span>
+                    <span className="text-sm">{busFeatures?.source}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     🎯 <span className="text-sm font-medium">Destination:</span>
-                    <span className="text-sm">{busDetails.destination}</span>
+                    <span className="text-sm">{busFeatures?.destination}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>
-                      <strong>Departure:</strong> {busDetails.departureTime}
+                      <strong>Departure:</strong> {busFeatures?.departureTime}
                     </span>
                     <span>
-                      <strong>Arrival:</strong> {busDetails.arrivalTime}
+                      <strong>Arrival:</strong> {busFeatures?.arrivalTime}
                     </span>
                   </div>
                 </div>
@@ -89,11 +103,11 @@ const BusModal = ({ busDetails, showInfoModal ,setShowInfoModal}: BusModalProps)
 
                 <div>
                   <p className="text-sm font-medium mb-2">
-                    Bus Type: {busDetails.busType}
+                    Bus Type: {busFeatures?.type}
                   </p>
                   <p className="text-sm font-medium mb-2">Amenities:</p>
                   <div className="flex flex-wrap gap-1">
-                    {busDetails.amenities.map((amenity, index) => (
+                    {busFeatures?.amenities.map((amenity, index) => (
                       <span
                         key={index}
                         className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded"

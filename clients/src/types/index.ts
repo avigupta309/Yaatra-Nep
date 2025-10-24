@@ -31,7 +31,7 @@ export const busDetails: BusFeatures = {
   destination: "Pune",
   departureTime: "6:00 AM",
   arrivalTime: "9:30 AM",
-  busType: "AC Sleeper",
+  type: "AC Sleeper",
   amenities: [
     "WiFi",
     "Charging Point",
@@ -64,7 +64,7 @@ export interface PassengerDetail {
 
 export interface User {
   id: string;
-  name: string;
+  fullName: string;
   email: string;
   phone: string;
   role: "user" | "admin";
@@ -73,8 +73,8 @@ export interface User {
 export interface SearchFilters {
   source: string;
   destination: string;
-  // travelDate: Date
-  busType?: "AC" | "Non-AC";
+  type?: "AC" | "Non-AC";
+  updateAt: number;
 }
 
 export interface BusFeatures {
@@ -86,6 +86,27 @@ export interface BusFeatures {
   destination: string;
   departureTime: string;
   arrivalTime: string;
-  busType: string;
+  type: string;
+  amenities: string[];
+}
+
+export interface BusInfo {
+  _id: string;
+  busDriver: { driverName: string; email: string };
+  lattitude: number;
+  longititude: number;
+  rating: number;
+  operator: string;
+  busName: string;
+  farePerSeat: number;
+  busColor: string;
+  busNumber: string;
+  totalSeats: number;
+  availableSeats: number;
+  source: string;
+  destination: string;
+  departureTime: string;
+  arrivalTime: string;
+  type: string;
   amenities: string[];
 }

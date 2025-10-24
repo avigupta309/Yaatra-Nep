@@ -1,4 +1,13 @@
 import mongoose, { Schema, model } from "mongoose";
+
+function capitalizeWords(str) {
+    return str
+        .trim()
+        .toLowerCase()
+        .split(' ')
+        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(' ');
+}
 const busSchema = new Schema({
     busName: {
         type: String,
@@ -31,11 +40,13 @@ const busSchema = new Schema({
         type: String,
         required: true,
         trim: true,
+        set: capitalizeWords,
     },
     destination: {
         type: String,
         required: true,
         trim: true,
+        set: capitalizeWords,
     },
     departureTime: {
         type: String,

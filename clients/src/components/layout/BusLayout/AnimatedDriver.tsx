@@ -1,11 +1,10 @@
-import { BusFeatures } from "../../../types";
+import { BusInfo } from "../../../types";
 
-
-interface AnimatedDriverProps{
-  busDetails:BusFeatures,
+interface AnimatedDriverProps {
+  busFeatures: BusInfo | null;
 }
 
-const AnimatedDriver = ({ busDetails }:AnimatedDriverProps) => {
+const AnimatedDriver = ({ busFeatures }: AnimatedDriverProps) => {
   return (
     <div>
       <div className="bg-white rounded-lg shadow-lg p-4">
@@ -16,7 +15,8 @@ const AnimatedDriver = ({ busDetails }:AnimatedDriverProps) => {
           </div>
           <div>
             <p className="font-semibold text-gray-800">
-              {busDetails.driverName}
+              {/* {busFeatures.busDriver?.driverName} */}
+              {busFeatures?.busDriver.driverName}
             </p>
             <p className="text-sm text-gray-600">Professional Driver</p>
             <div className="flex items-center mt-1">
