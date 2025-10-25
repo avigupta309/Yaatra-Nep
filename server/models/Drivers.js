@@ -1,10 +1,20 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, set } from "mongoose";
 import { createHmac, randomBytes } from 'crypto'
+
+function capitalizeWords(str) {
+    return str
+        .trim()
+        .toLowerCase()
+        .split(' ')
+        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(' ');
+}
 const driverSchema = new Schema({
     driverName: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        set: capitalizeWords,
     },
     email: {
         type: String,
@@ -54,4 +64,4 @@ driverSchema.methods.matchPassword = function (typePassword) {
     return driver
 }
 
-export const DriverModel =  model("drivers", driverSchema)
+export const DriverModel = model("drivers", driverSchema)

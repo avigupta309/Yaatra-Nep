@@ -66,6 +66,15 @@ const busSchema = new Schema({
         required: true,
         min: 1,
     },
+    seatLayout: {
+        type: [
+            {
+                seatNumber: { type: String, required: true },
+                isAvailable: { type: Boolean, default: true }
+            }
+        ],
+        default: []
+    },
     availableSeats: {
         type: Number,
         required: true,

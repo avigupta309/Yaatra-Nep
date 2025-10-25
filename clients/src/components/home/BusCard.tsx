@@ -14,8 +14,22 @@ import { Bus } from "../../types";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-export function BusCard() {
+
+interface viewMoreProps {
+  viewMore: number;
+  setStopView: (val: boolean) => void;
+}
+
+export function BusCard({ viewMore, setStopView }: viewMoreProps) {
   const [bus, setBus] = useState<Bus[]>([]);
+  useEffect(() => {
+    if (bus.length <= viewMore) {
+      setStopView(false);
+    } else {
+      setStopView(true);
+    }
+  }, [bus, viewMore, setStopView]);
+
   useEffect(() => {
     async function fetchingData() {
       const response = await axios.get("http://localhost:3000/api/bus/viewbus");
@@ -41,11 +55,10 @@ export function BusCard() {
     }
   };
 
-
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200">
       <CardContent className="p-2 ">
-        {bus.map((bus, index) => {
+        {bus.slice(0, viewMore).map((bus, index) => {
           return (
             <div
               key={index}

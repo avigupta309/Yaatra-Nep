@@ -1,6 +1,7 @@
 import { BusModel } from '../models/bus.js'
 import { DriverModel } from '../models/Drivers.js';
 import { HandleCityAdded } from './city.js';
+import { generateSeatLayout } from './generateSeatLayout.js';
 
 export async function HandleBusSubmitData(req, res) {
     let {
@@ -12,8 +13,7 @@ export async function HandleBusSubmitData(req, res) {
         departureTime,
         arrivalTime,
         farePerSeat,
-        totalSeats,
-        availableSeats,
+        seatLayoutRows,
         amenities,
         operator,
         busDriver
@@ -28,9 +28,15 @@ export async function HandleBusSubmitData(req, res) {
     const driverDocs = await DriverModel.findOne({ email: busDriver })
     if (!driverDocs) return res.status(400).json({ data: "Enter Valid Driver Email" })
     busDriver = driverDocs._id // to populate in driver through bus of driverId
+
+
+    const seatLayout = generateSeatLayout(seatLayoutRows);
+    const totalSeats = seatLayout.length;
+    const availableSeats = totalSeats;
+
     try {
         await BusModel.create({
-            busName, busNumber, type, source, destination, departureTime, arrivalTime, farePerSeat, totalSeats, availableSeats, amenities, operator, busDriver
+            busName, busNumber, type, source, destination, departureTime, arrivalTime, farePerSeat, totalSeats, availableSeats, amenities, operator, busDriver, seatLayout
         })
         console.log(source, destination)
 

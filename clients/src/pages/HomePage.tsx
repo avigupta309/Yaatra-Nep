@@ -1,36 +1,12 @@
-// import { useState } from "react";
 import { SearchForm } from "../components/home/SearchForm";
 import { BusCard } from "../components/home/BusCard";
-// import { mockBuses } from "../data/mockData";
-// import { Bus, SearchFilters } from "../types";
-// import { MapPin } from "lucide-react";
 import Feature from "../components/home/Feature";
 import FilterBus from "../components/layout/FilterBus";
+import { useState } from "react";
 
 export function HomePage() {
-  // const [, setSearchResults] = useState<Bus[]>([]);
-  // const [, setSearchFilters] = useState<SearchFilters | null>(
-  //   null
-  // );
-  // const [, setIsSearched] = useState(false);
-
-  // const handleSearch = (filters: SearchFilters) => {
-  //   setSearchFilters(filters);
-  //   setIsSearched(true);
-
-  //   const filteredBuses = mockBuses.filter((bus) => {
-  //     const matchesRoute =
-  //       bus.source.toLowerCase().includes(filters.source.toLowerCase()) &&
-  //       bus.destination
-  //         .toLowerCase()
-  //         .includes(filters.destination.toLowerCase());
-  //     const matchesType = !filters.type || bus.type === filters.type;
-
-  //     return matchesRoute && matchesType;
-  //   });
-
-  //   setSearchResults(filteredBuses);
-  // };
+  const [viewMore, setViewMore] = useState<number>(5);
+  const [stopView, setStopView] = useState<boolean>(true);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
@@ -50,7 +26,7 @@ export function HomePage() {
 
           <div className="mb-16">
             {/* <SearchForm onSearch={handleSearch} /> */}
-            <SearchForm/>
+            <SearchForm />
           </div>
         </div>
       </section>
@@ -71,17 +47,24 @@ export function HomePage() {
           </div>
 
           <div className="space-y-6">
-            <BusCard />
+            <BusCard viewMore={viewMore} setStopView={setStopView} />
           </div>
 
           <div className="text-center mt-8">
-            <button className="px-6 py-3 border-2 border-blue-600 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition font-medium">
-              View All Routes
+            <button
+              className={`px-6 py-3 rounded-lg font-medium transition border-2
+    ${
+      stopView
+        ? "border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+        : "bg-gray-300 text-gray-500 border-gray-300 cursor-not-allowed"
+    }`}
+              onClick={() => setViewMore((prev) => prev + 5)}
+            >
+              {stopView ? "View More" : "You Reached The Bottom"}
             </button>
           </div>
         </div>
       </section>
-
       {/* Features Section */}
 
       <Feature />

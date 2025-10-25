@@ -1,11 +1,19 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, set } from "mongoose";
 import { createHmac, randomBytes } from 'crypto'
+function capitalizeWords(str) {
+    return str
+        .trim()
+        .toLowerCase()
+        .split(' ')
+        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(' ');
+}
 
 const userSchema = new Schema({
     fullName: {
         type: String,
         trim: true,
-
+        set: capitalizeWords,
     },
     email: {
         type: String,

@@ -1,25 +1,33 @@
 import { cityModel } from "../models/CityName.js";
-
+function capitalizeWords(str) {
+    if (!str) return "";
+    return str
+        .trim()
+        .toLowerCase()
+        .split(" ")
+        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" ");
+}
 
 export async function HandleCityAdded({ source, destination }) {
     try {
-        function formatCityName(name) {
-            if (!name) return "";
-            return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-        }
+        const formattedSource = capitalizeWords(source);
+        const formattedDestination = capitalizeWords(destination);
 
-        const formattedSource = formatCityName(source);
-        const formattedDestination = formatCityName(destination);
+        console.log("Adding cities:", formattedSource, formattedDestination);
 
         await cityModel.updateOne(
             {},
             { $addToSet: { cityName: { $each: [formattedSource, formattedDestination] } } },
             { upsert: true }
         );
-    } catch (error) {
 
+        console.log("Cities saved successfully");
+    } catch (error) {
+        console.error("Error adding cities:", error);
     }
 }
+
 
 export async function viewAllCityName(req, res) {
     try {

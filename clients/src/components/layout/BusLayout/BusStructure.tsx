@@ -11,9 +11,9 @@ const BusStructure = () => {
 
     for (let row = 1; row <= 7; row++) {
       // Left column: A and B seats
-      leftColumn.push([`${row}A`, `${row}B`]);
+      leftColumn.push([`A${row}`, `B${row}`]);
       // Right column: C and D seats
-      rightColumn.push([`${row}C`, `${row}D`]);
+      rightColumn.push([`C${row}`, `D${row}`]);
     }
 
     return { leftColumn, rightColumn };
