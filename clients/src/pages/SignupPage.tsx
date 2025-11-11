@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { Bus, Eye, EyeOff, UserPlus } from "lucide-react";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 interface SignupFormData {
   fullName: string;
@@ -266,7 +266,6 @@ export const SignupPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 };

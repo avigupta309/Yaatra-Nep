@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Input } from "../../components/ui/input";
 
 export function DisplayDate() {
   const [currentDateTime, setCurrentDateTime] = useState<string>("");
@@ -27,11 +26,11 @@ export function DisplayDate() {
 
   return (
     <div className="w-full">
-      <Input
+      <input
         type="text"
         readOnly
         value={currentDateTime}
-        className="h-12 text-gray-700 font-medium"
+        className="w-full h-12 px-4 border rounded-lg text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
     </div>
   );

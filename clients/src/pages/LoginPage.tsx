@@ -1,20 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { Bus, Eye, EyeOff, LogIn } from "lucide-react";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
+import { useAuth } from "../hooks/Auth";
 interface LoginFormData {
   email: string;
   password: string;
 }
 
-interface userLoginProps {
-  data: string;
-  user: { fullName: string; email: string };
-}
-
 export const LoginPage: React.FC = () => {
+  const { setAuthUser, setLogged } = useAuth();
   const {
     register,
     handleSubmit,
@@ -22,32 +19,28 @@ export const LoginPage: React.FC = () => {
   } = useForm<LoginFormData>();
 
   const [showPassword, setShowPassword] = useState(false);
-  const [user, setUser] = useState<userLoginProps>();
   const navigate = useNavigate();
 
   const onSubmit = async (data: LoginFormData) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/user/userlogin",
+        "http://localhost:3000/api/user/login",
         data,
         { withCredentials: true }
       );
-      setUser(response.data);
+      console.log(response.data.user);
+      setAuthUser(response.data.user);
+      toast.success(`Login Sucessfully mr/ms ${response.data.user?.fullName}`);
+      setTimeout(() => {
+        setLogged(true);
+        navigate("/");
+      }, 1000);
+
       // eslint-disable-next-line
     } catch (error: any) {
       toast.error(error?.response.data.data || "wrong password");
     }
   };
-
-  useEffect(() => {
-    if (user) {
-      toast.success(`${user?.data} mr/ms ${user?.user.fullName}`);
-      setTimeout(() => {
-        navigate("/");
-      }, 1000);
-    }
-    //eslint-disable-next-line
-  }, [user]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center px-4">
@@ -65,7 +58,7 @@ export const LoginPage: React.FC = () => {
         </div>
 
         {/* Card */}
-        <div className="bg-white shadow-xl rounded-2xl border border-indigo-100 p-8">
+        <div className="bg-white shadow-xl rounded-2xl border border-indigo-100 p-8 relative">
           <h2 className="text-2xl font-bold text-center mb-2 text-gray-800">
             Sign In
           </h2>
@@ -167,7 +160,6 @@ export const LoginPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 };

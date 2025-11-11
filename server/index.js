@@ -31,12 +31,15 @@ ConnectMongoDb(MONGO_URI)
 app.use('/api/user', UserRouter)
 app.use('/api/bus', BusRouter)
 app.use('/api/driver', DriverRouter)
-app.use('/api/city',CityRouter)
-app.get('/', (req, res) => {
-    return res.json({ mission: "start" })
+app.use('/api/city', CityRouter)
+app.get('/', checkAuthUser("tokenId"), (req, res) => {
+    console.log("main pount")
+    console.log(req.validUser)
+    return res.json({ user: req.validUser })
 })
-// app.get('/', checkAuthUser("tokenId"), (req, res) => {
-//     return res.json({ mission: "start" })
-// })
+app.get('/api/logout', (req, res) => {
+    res.clearCookie("tokenId")
+    return res.status(200).json({ message: 'Logged out' });
+})
 
 app.listen(port, () => { console.log(`Server is started at port : ${port}`.bgMagenta) })

@@ -7,13 +7,10 @@ import {
   Zap,
   Coffee,
 } from "lucide-react";
-import { Button } from "../../components/ui/button";
-import { Card, CardContent } from "../../components/ui/card";
-import { Badge } from "../../components/ui/badge";
-import { Bus } from "../../types";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Bus } from "../../types";
 
 interface viewMoreProps {
   viewMore: number;
@@ -22,6 +19,7 @@ interface viewMoreProps {
 
 export function BusCard({ viewMore, setStopView }: viewMoreProps) {
   const [bus, setBus] = useState<Bus[]>([]);
+
   useEffect(() => {
     if (bus.length <= viewMore) {
       setStopView(false);
@@ -56,100 +54,106 @@ export function BusCard({ viewMore, setStopView }: viewMoreProps) {
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200">
-      <CardContent className="p-2 ">
-        {bus.slice(0, viewMore).map((bus, index) => {
-          return (
-            <div
-              key={index}
-              className="flex p-4 flex-col lg:flex-row lg:items-center justify-between space-y-4 lg:space-y-0 mt-5 hover:shadow-md rounded-lg border-2  "
-            >
-              {/* Bus Info */}
-              <div className="flex-1 ">
-                <div className="flex items-start justify-between mb-3 ">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                      {bus.busName}
-                    </h3>
-                    <p className="text-sm text-gray-600 mb-2">{bus.operator}</p>
-                    <div className="flex items-center space-x-2 mb-2">
-                      <Badge
-                        variant={bus.type === "AC" ? "default" : "secondary"}
-                      >
-                        {bus.type}
-                      </Badge>
-                      <div className="flex items-center space-x-1">
-                        <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                        <span className="text-sm font-medium">
-                          {bus?.rating || 5}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-gray-900">
-                      ₹ {bus.farePerSeat}
-                    </div>
-                    <div className="text-sm text-gray-600">per seat</div>
-                  </div>
-                </div>
-
-                {/* Route and Time */}
-                <div className="flex items-center space-x-4 mb-3">
-                  <div className="flex items-center space-x-2 text-sm text-gray-600">
-                    <MapPin className="h-4 w-4" />
-                    <span>
-                      {bus.source} → {bus.destination}
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-sm text-gray-600">
-                    <Clock className="h-4 w-4" />
-                    <span>
-                      {bus.departureTime} - {bus.arrivalTime}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Amenities */}
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {bus.amenities.slice(0, 4).map((amenity, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center space-x-1 text-xs text-gray-600 bg-gray-50 px-2 py-1 rounded"
-                    >
-                      {getAmenityIcon(amenity)}
-                      <span>{amenity}</span>
-                    </div>
-                  ))}
-
-                  {bus.amenities.length > 4 && (
-                    <div className="text-xs text-gray-500 mt-1">
-                      +{bus.amenities.length - 4} more
-                    </div>
-                  )}
-                </div>
-
-                {/* Availability */}
-                <div className="flex items-center space-x-3">
-                  <Badge className="">{bus.availableSeats}</Badge>
-                  <span className="text-sm text-gray-500">
-                    {bus.totalSeats}
+    <div className="space-y-4">
+      {bus.slice(0, viewMore).map((busItem, index) => (
+        <div
+          key={index}
+          className="flex flex-col lg:flex-row lg:items-center justify-between p-4 mt-5 rounded-lg border-2 border-gray-200 hover:shadow-lg transition-shadow duration-300"
+        >
+          {/* Bus Info */}
+          <div className="flex-1">
+            <div className="flex items-start justify-between mb-3">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                  {busItem.busName}
+                </h3>
+                <p className="text-sm text-gray-600 mb-2">{busItem.operator}</p>
+                <div className="flex items-center space-x-2 mb-2">
+                  <span
+                    className={`px-2 py-1 rounded text-xs ${
+                      busItem.type === "AC"
+                        ? "bg-gray-200 text-gray-800"
+                        : "bg-gray-300 text-gray-700"
+                    }`}
+                  >
+                    {busItem.type}
                   </span>
+                  <div className="flex items-center space-x-1">
+                    <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                    <span className="text-sm font-medium">
+                      {busItem?.rating || 5}
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              {/* Action Button */}
-              <div className="lg:ml-6">
-                <Link to={`/selectionbus/${bus._id}`}>
-                  <Button className="w-full lg:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-2">
-                    {bus.availableSeats === 0 ? "Sold Out" : "Select Seats"}
-                  </Button>
-                </Link>
+              <div className="text-right">
+                <div className="text-2xl font-bold text-gray-900">
+                  ₹ {busItem.farePerSeat}
+                </div>
+                <div className="text-sm text-gray-600">per seat</div>
               </div>
             </div>
-          );
-        })}
-      </CardContent>
-    </Card>
+
+            {/* Route and Time */}
+            <div className="flex items-center space-x-4 mb-3">
+              <div className="flex items-center space-x-2 text-sm text-gray-600">
+                <MapPin className="h-4 w-4" />
+                <span>
+                  {busItem.source} → {busItem.destination}
+                </span>
+              </div>
+              <div className="flex items-center space-x-2 text-sm text-gray-600">
+                <Clock className="h-4 w-4" />
+                <span>
+                  {busItem.departureTime} - {busItem.arrivalTime}
+                </span>
+              </div>
+            </div>
+
+            {/* Amenities */}
+            <div className="flex flex-wrap gap-2 mb-3">
+              {busItem.amenities.slice(0, 4).map((amenity, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center space-x-1 text-xs text-gray-600 bg-gray-50 px-2 py-1 rounded"
+                >
+                  {getAmenityIcon(amenity)}
+                  <span>{amenity}</span>
+                </div>
+              ))}
+
+              {busItem.amenities.length > 4 && (
+                <div className="text-xs text-gray-500 mt-1">
+                  +{busItem.amenities.length - 4} more
+                </div>
+              )}
+            </div>
+
+            {/* Availability */}
+            <div className="flex items-center space-x-3">
+              <span className="px-2 py-1 rounded bg-gray-200 text-gray-800 text-xs">
+                {busItem.availableSeats}
+              </span>
+              <span className="text-sm text-gray-500">{busItem.totalSeats}</span>
+            </div>
+          </div>
+
+          {/* Action Button */}
+          <div className="lg:ml-6 mt-3 lg:mt-0">
+            <Link
+              to={`/selectionbus/${busItem._id}`}
+              className={`block text-center w-full lg:w-auto px-8 py-2 rounded-lg font-medium text-white transition ${
+                busItem.availableSeats === 0
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700"
+              }`}
+            >
+              {busItem.availableSeats === 0 ? "Sold Out" : "Select Seats"}
+            </Link>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }

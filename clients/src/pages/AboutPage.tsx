@@ -1,6 +1,5 @@
 import React from "react";
 import { BusFront, CheckCircle2, Laptop, Heart, Code2 } from "lucide-react";
-import { Card, CardContent } from "../components/ui/card";
 
 const AboutPage: React.FC = () => {
   return (
@@ -33,44 +32,41 @@ const AboutPage: React.FC = () => {
 
       {/* Features Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-20">
-        <Card className="bg-white rounded-2xl shadow-xl border border-indigo-100 hover:shadow-2xl transition-transform transform hover:-translate-y-2">
-          <CardContent className="p-6 text-center">
-            <CheckCircle2 size={36} className="text-blue-600 mx-auto mb-4" />
-            <h3 className="text-xl font-bold mb-2 text-gray-800">
-              Smart Seat Selection
-            </h3>
-            <p className="text-gray-600 text-sm">
-              Choose your desired seat (like 1A, 2B, 4D, etc.) in real-time,
-              view availability, and confirm instantly.
-            </p>
-          </CardContent>
-        </Card>
+        {/* Feature 1 */}
+        <div className="bg-white rounded-2xl shadow-xl border border-indigo-100 hover:shadow-2xl transition-transform transform hover:-translate-y-2 p-6 text-center">
+          <CheckCircle2 size={36} className="text-blue-600 mx-auto mb-4" />
+          <h3 className="text-xl font-bold mb-2 text-gray-800">
+            Smart Seat Selection
+          </h3>
+          <p className="text-gray-600 text-sm">
+            Choose your desired seat (like 1A, 2B, 4D, etc.) in real-time,
+            view availability, and confirm instantly.
+          </p>
+        </div>
 
-        <Card className="bg-white rounded-2xl shadow-xl border border-indigo-100 hover:shadow-2xl transition-transform transform hover:-translate-y-2">
-          <CardContent className="p-6 text-center">
-            <Laptop size={36} className="text-blue-600 mx-auto mb-4" />
-            <h3 className="text-xl font-bold mb-2 text-gray-800">
-              Smooth Booking Experience
-            </h3>
-            <p className="text-gray-600 text-sm">
-              Clean UI with responsive design, easy navigation, and secure data
-              handling for the best booking experience.
-            </p>
-          </CardContent>
-        </Card>
+        {/* Feature 2 */}
+        <div className="bg-white rounded-2xl shadow-xl border border-indigo-100 hover:shadow-2xl transition-transform transform hover:-translate-y-2 p-6 text-center">
+          <Laptop size={36} className="text-blue-600 mx-auto mb-4" />
+          <h3 className="text-xl font-bold mb-2 text-gray-800">
+            Smooth Booking Experience
+          </h3>
+          <p className="text-gray-600 text-sm">
+            Clean UI with responsive design, easy navigation, and secure data
+            handling for the best booking experience.
+          </p>
+        </div>
 
-        <Card className="bg-white rounded-2xl shadow-xl border border-indigo-100 hover:shadow-2xl transition-transform transform hover:-translate-y-2">
-          <CardContent className="p-6 text-center">
-            <Heart size={36} className="text-blue-600 mx-auto mb-4" />
-            <h3 className="text-xl font-bold mb-2 text-gray-800">
-              User-Centered Design
-            </h3>
-            <p className="text-gray-600 text-sm">
-              We care about simplicity and clarity. Every part of the system is
-              designed for a seamless user journey.
-            </p>
-          </CardContent>
-        </Card>
+        {/* Feature 3 */}
+        <div className="bg-white rounded-2xl shadow-xl border border-indigo-100 hover:shadow-2xl transition-transform transform hover:-translate-y-2 p-6 text-center">
+          <Heart size={36} className="text-blue-600 mx-auto mb-4" />
+          <h3 className="text-xl font-bold mb-2 text-gray-800">
+            User-Centered Design
+          </h3>
+          <p className="text-gray-600 text-sm">
+            We care about simplicity and clarity. Every part of the system is
+            designed for a seamless user journey.
+          </p>
+        </div>
       </div>
 
       {/* Developer Section */}
@@ -81,9 +77,7 @@ const AboutPage: React.FC = () => {
             <h2 className="text-2xl font-bold text-gray-800 mb-2">
               Developed by
             </h2>
-            <p className="text-blue-700 font-semibold text-lg">
-              Avinash Gupta
-            </p>
+            <p className="text-blue-700 font-semibold text-lg">Avinash Gupta</p>
             <p className="text-gray-600 text-sm mt-1">
               Full Stack Developer | MERN Stack Enthusiast | Passionate about
               Clean UI

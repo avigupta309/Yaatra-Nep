@@ -3,14 +3,15 @@ import { createToken } from '../service/user.js'
 import { createHmac, randomBytes } from 'crypto'
 
 export async function HandleUserSignUp(req, res) {
-    const { fullName, email, phoneNumber, password } = req.body;
-    console.log(fullName, email, phoneNumber, password)
+    console.log("avinash is here")
+    const { fullName, email, phoneNumber, password, role } = req.body;
     const isUserExist = await userModel.findOne({ email: email })
     if (isUserExist) return res.status(409).json({ data: "Email is already Exist" })
     try {
         await userModel.create({
             fullName,
             email,
+            role,
             phoneNumber,
             password
         })
@@ -22,15 +23,15 @@ export async function HandleUserSignUp(req, res) {
 }
 
 
-export async function HandleUserLogin(req, res) {
-    const { email, password } = req.body;
+export async function HandleLogin(req, res) {
+    const { email, password, role } = req.body;
     const user = await userModel.findOne({ email: email })
     if (!user) return res.status(404).json({ data: "Email is Not registred" })
     try {
         const isMatchPassword = await user.matchPassword(password)
         const token = createToken(isMatchPassword)
         res.cookie("tokenId", token, { httpOnly: true })
-        return res.status(200).json({ data: "SignIn Sucessfully ", user: { fullName: user.fullName, email: user.email } })
+        return res.status(200).json({ data: "SignIn Sucessfully ", user: { fullName: user.fullName, email: user.email, role: user.role ,phone:user.phoneNumber} })
     } catch (error) {
         return res.status(401).json({ data: "Password not match..." })
     }

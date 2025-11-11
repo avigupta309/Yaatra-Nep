@@ -67,7 +67,8 @@ export interface User {
   fullName: string;
   email: string;
   phone: string;
-  role: "user" | "admin";
+  role: string;
+  profilePic: string;
 }
 
 export interface SearchFilters {

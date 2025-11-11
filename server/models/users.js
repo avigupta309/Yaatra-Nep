@@ -1,4 +1,4 @@
-import { Schema, model, set } from "mongoose";
+import { Schema, model } from "mongoose";
 import { createHmac, randomBytes } from 'crypto'
 function capitalizeWords(str) {
     return str
@@ -32,6 +32,11 @@ const userSchema = new Schema({
     salt: {
         type: String,
         trim: true
+    },
+    role: {
+        type:String,
+        enum: ["admin", "user","driver","operator"],
+        default: "user"
     }
 }, { timestamps: true })
 

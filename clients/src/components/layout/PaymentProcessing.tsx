@@ -1,24 +1,5 @@
 import React, { useState, ChangeEvent } from "react";
 import { Upload, CheckCircle2, BusFront } from "lucide-react";
-import { Button } from "../../components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardFooter,
-} from "../../components/ui/card";
-
-// interface BusDetails {
-//   busName: string;
-//   source: string;
-//   destination: string;
-// }
-
-// interface PaymentProcessingProps {
-//   busDetails: BusDetails;
-//   selectedSeats: string[];
-//   onSubmitPayment: (screenshot: File) => void;
-// }
 
 const PaymentProcessing: React.FC = () => {
   const [screenshot, setScreenshot] = useState<File | null>(null);
@@ -40,14 +21,16 @@ const PaymentProcessing: React.FC = () => {
     // simulate upload delay
     setTimeout(() => {
       setIsUploading(false);
-      //   onSubmitPayment(screenshot);
+      // onSubmitPayment(screenshot);
     }, 1500);
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-sky-50 to-indigo-100 p-6 animate-fade-in">
-      <Card className="w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-indigo-100 transition-all duration-300 hover:shadow-3xl">
-        <CardHeader className="text-center border-b pb-4">
+      <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-indigo-100 transition-all duration-300 hover:shadow-3xl">
+
+        {/* Header */}
+        <div className="text-center border-b pb-4">
           <div className="flex justify-center mb-2 animate-pulse">
             <BusFront size={40} className="text-blue-700" />
           </div>
@@ -57,9 +40,10 @@ const PaymentProcessing: React.FC = () => {
           <p className="text-gray-500 text-sm mt-1">
             Scan the QR code & upload payment proof
           </p>
-        </CardHeader>
+        </div>
 
-        <CardContent className="p-6 space-y-5">
+        {/* Content */}
+        <div className="p-6 space-y-5">
           {/* Booking Summary */}
           <div className="bg-indigo-50 rounded-xl p-4 shadow-inner">
             <h3 className="font-semibold text-gray-700 mb-2">
@@ -67,39 +51,24 @@ const PaymentProcessing: React.FC = () => {
             </h3>
             <div className="grid grid-cols-2 gap-2 text-sm">
               <span className="text-gray-600">Bus Name:</span>
-              <span className="font-medium text-gray-800">
-                {/* {busDetails?.busName} */}
-                BusName-Volvo
-              </span>
+              <span className="font-medium text-gray-800">BusName-Volvo</span>
 
               <span className="text-gray-600">From:</span>
-              <span className="font-medium text-gray-800">
-                {/* {busDetails?.source} */}
-                Kalaiya
-              </span>
+              <span className="font-medium text-gray-800">Kalaiya</span>
 
               <span className="text-gray-600">To:</span>
-              <span className="font-medium text-gray-800">
-                {/* {busDetails?.destination}
-                 */}
-                kathmandu
-              </span>
+              <span className="font-medium text-gray-800">Kathmandu</span>
 
               <span className="text-gray-600">Selected Seats:</span>
-              <span className="font-medium text-gray-800">
-                {/* {selectedSeats.join(", ")} */}
-                1A,1B,2D,3D etc.
-              </span>
+              <span className="font-medium text-gray-800">1A,1B,2D,3D etc.</span>
             </div>
           </div>
 
           {/* QR Code */}
           <div className="text-center">
-            <p className="text-gray-600 mb-2 font-medium">
-              Scan this QR code to pay
-            </p>
+            <p className="text-gray-600 mb-2 font-medium">Scan this QR code to pay</p>
             <img
-              src="/Qr-code.jpg" // replace with your QR image or dynamic path
+              src="/Qr-code.jpg"
               alt="Payment QR Code"
               className="mx-auto rounded-xl border-2 border-indigo-200 w-48 h-48 object-contain transform transition-transform duration-300 hover:scale-105"
             />
@@ -127,10 +96,11 @@ const PaymentProcessing: React.FC = () => {
               </label>
             </div>
           </div>
-        </CardContent>
+        </div>
 
-        <CardFooter className="p-6 flex justify-center">
-          <Button
+        {/* Footer / Button */}
+        <div className="p-6 flex justify-center">
+          <button
             onClick={handlePaymentSubmit}
             disabled={isUploading}
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-xl flex items-center gap-2 shadow-lg transition-transform duration-300 hover:scale-105 disabled:opacity-50"
@@ -146,9 +116,9 @@ const PaymentProcessing: React.FC = () => {
                 Submit Payment Proof
               </>
             )}
-          </Button>
-        </CardFooter>
-      </Card>
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
