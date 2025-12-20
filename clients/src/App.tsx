@@ -9,8 +9,8 @@ import AboutPage from "./pages/AboutPage";
 import { useCheckAuth } from "./hooks/CheckAuth";
 import { useAuth } from "./hooks/Auth";
 import { ToastContainer } from "react-toastify";
-import AdminDashBoard from "./components/Admin/AdminDashBoard";
 import {UserProfile} from './components/userProfile/Profile'
+import AdminSettingsPage from "./pages/SettingPage";
 
 function App() {
   const { logged } = useAuth();
@@ -40,7 +40,7 @@ function App() {
 
             <Route path="/profile" element={<UserProfile/>}/>
 
-            <Route path="/one" element={<AdminDashBoard />} />
+            <Route path="/settings" element={<AdminSettingsPage />} />
 
           </Routes>
         </main>
