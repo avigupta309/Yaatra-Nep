@@ -54,9 +54,13 @@ userSchema.pre("save", function (next) {
 
 userSchema.methods.matchPassword = function (typePassword) {
     const user = this
-    const UserHashPassword = createHmac("sha256", user.salt).update(typePassword).digest("hex")
+    const UserHashPassword = createHmac("sha256", user.salt).update(typePassword.trim()).digest("hex")
     const isValidUser = UserHashPassword === user.password
-    if (!isValidUser) return null
+    console.log(isValidUser+"okkkkkkkkkkkkkkk")
+   if (!isValidUser) {
+     throw new Error("Invalid password");
+   }
+
     return user
 }
 

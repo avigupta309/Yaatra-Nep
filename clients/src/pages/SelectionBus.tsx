@@ -28,7 +28,7 @@ const SelectionBus: React.FC = () => {
     FetchingCityDetails();
   }, [id]);
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 text-gray-800">
       <div className="max-w-6xl mx-auto">
         {/* Header Section */}
         <BusHeader
@@ -68,7 +68,7 @@ const SelectionBus: React.FC = () => {
               </div>
 
               {/* Bus Layout */}
-              <BusStructure />
+              <BusStructure busFeatures={busFeatures} />
             </div>
           </div>
         </div>
@@ -79,7 +79,7 @@ const SelectionBus: React.FC = () => {
           showInfoModal={showInfoModal}
           setShowInfoModal={setShowInfoModal}
         />
-        <Map busFeatures={busFeatures}  />
+        <Map busFeatures={busFeatures} />
       </div>
     </div>
   );

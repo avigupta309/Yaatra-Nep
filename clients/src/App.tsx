@@ -9,8 +9,8 @@ import AboutPage from "./pages/AboutPage";
 import { useCheckAuth } from "./hooks/CheckAuth";
 import { useAuth } from "./hooks/Auth";
 import { ToastContainer } from "react-toastify";
-import {UserProfile} from './components/userProfile/Profile'
-import AdminSettingsPage from "./pages/SettingPage";
+import {UserProfile} from './components/User/Profile'
+import {AdminSettingsPage} from "./pages/SettingPage";
 
 function App() {
   const { logged } = useAuth();

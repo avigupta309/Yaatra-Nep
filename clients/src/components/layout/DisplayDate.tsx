@@ -30,7 +30,7 @@ export function DisplayDate() {
         type="text"
         readOnly
         value={currentDateTime}
-        className="w-full h-12 px-4 border rounded-lg text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full h-12 px-4 border rounded-lg text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white "
       />
     </div>
   );

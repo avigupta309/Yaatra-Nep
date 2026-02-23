@@ -1,13 +1,5 @@
 import { useState, useEffect } from "react";
 import { User } from "lucide-react";
-import { Button } from "../../components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
-import { Badge } from "../../components/ui/badge";
 import { Seat } from "../../types";
 
 interface SeatSelectionProps {
@@ -25,9 +17,8 @@ export function SeatSelection({
   const [seats, setSeats] = useState<Seat[]>([]);
 
   useEffect(() => {
-    // Generate seat layout (2 columns, 7 pairs each column = 28 seats)
     const generatedSeats: Seat[] = [];
-    const bookedSeats = new Set([3, 8, 12, 15, 19, 23, 26]); // Mock some booked seats
+    const bookedSeats = new Set([3, 8, 12, 15, 19, 23, 26]);
 
     for (let i = 1; i <= totalSeats; i++) {
       generatedSeats.push({
@@ -50,10 +41,7 @@ export function SeatSelection({
     if (selectedSeats.includes(seatNumber)) {
       newSelectedSeats = selectedSeats.filter((s) => s !== seatNumber);
     } else {
-      if (selectedSeats.length >= 6) {
-        // Max 6 seats per booking
-        return;
-      }
+      if (selectedSeats.length >= 6) return;
       newSelectedSeats = [...selectedSeats, seatNumber];
     }
 
@@ -67,7 +55,6 @@ export function SeatSelection({
     return "bg-green-100 text-green-800 hover:bg-green-200 cursor-pointer";
   };
 
-  // Render seats in bus layout (2+2 configuration)
   const renderSeatLayout = () => {
     const rows = [];
     const seatsPerRow = 4;
@@ -86,18 +73,16 @@ export function SeatSelection({
 
         rowSeats.push(
           <div key={seatNumber} className={col === 1 ? "mr-6" : ""}>
-            <Button
-              variant="outline"
-              size="sm"
-              className={`w-10 h-10 p-0 text-xs font-medium transition-all duration-200 ${getSeatColor(
-                seat
+            <button
+              className={`w-10 h-10 p-0 text-xs font-medium transition-all duration-200 rounded ${getSeatColor(
+                seat,
               )}`}
               onClick={() => handleSeatClick(seatNumber)}
               disabled={!seat.isAvailable}
             >
               {seatNumber}
-            </Button>
-          </div>
+            </button>
+          </div>,
         );
       }
 
@@ -107,7 +92,7 @@ export function SeatSelection({
           className="flex items-center justify-center space-x-2 mb-2"
         >
           {rowSeats}
-        </div>
+        </div>,
       );
     }
 
@@ -115,61 +100,65 @@ export function SeatSelection({
   };
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <span>Select Your Seats</span>
-          <Badge variant="secondary">{selectedSeats.length} selected</Badge>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {/* Bus Front Indicator */}
-        <div className="text-center mb-6">
-          <div className="inline-block bg-gray-100 px-4 py-2 rounded-lg text-sm font-medium text-gray-600">
-            Driver
+    <div className="w-full max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg text-gray-800">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-semibold">Select Your Seats here</h2>
+        <div className="bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-sm">
+          {selectedSeats.length} selected
+        </div>
+      </div>
+
+      {/* Bus Front Indicator */}
+      <div className="text-center mb-6">
+        <div className="inline-block bg-gray-100 px-4 py-2 rounded-lg text-sm font-medium text-gray-600">
+          Driver
+        </div>
+      </div>
+
+      {/* Seat Layout */}
+      <div className="bg-gray-50 rounded-lg p-4 mb-6">
+        <div className="max-w-xs mx-auto">{renderSeatLayout()}</div>
+      </div>
+
+      {/* Legend */}
+      <div className="grid grid-cols-3 gap-4 text-sm mb-6 ">
+        <div className="flex items-center space-x-2">
+          <div className="w-6 h-6 bg-green-100 border border-green-200 rounded flex items-center justify-center">
+            <User className="h-3 w-3 text-green-600" />
+          </div>
+          <span className="text-gray-800">Availablezzzz</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <div className="w-6 h-6 bg-blue-600 rounded flex items-center justify-center">
+            <User className="h-3 w-3 text-white" />
+          </div>
+          <span>Selected</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <div className="w-6 h-6 bg-gray-300 rounded flex items-center justify-center">
+            <User className="h-3 w-3 text-gray-500" />
+          </div>
+          <span>Booked</span>
+        </div>
+      </div>
+
+      {/* Selected Seats */}
+      {selectedSeats.length > 0 && (
+        <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+          <h4 className="font-medium text-blue-900 mb-2">Selected Seats:</h4>
+          <div className="flex flex-wrap gap-2">
+            {selectedSeats.map((seat) => (
+              <div
+                key={seat}
+                className="px-2 py-1 bg-gray-200 text-gray-700 rounded-full text-sm"
+              >
+                Seat {seat}
+              </div>
+            ))}
           </div>
         </div>
-
-        {/* Seat Layout */}
-        <div className="bg-gray-50 rounded-lg p-4 mb-6">
-          <div className="max-w-xs mx-auto">{renderSeatLayout()}</div>
-        </div>
-
-        {/* Legend */}
-        <div className="grid grid-cols-3 gap-4 text-sm">
-          <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 bg-green-100 border border-green-200 rounded flex items-center justify-center">
-              <User className="h-3 w-3 text-green-600" />
-            </div>
-            <span>Available</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 bg-blue-600 rounded flex items-center justify-center">
-              <User className="h-3 w-3 text-white" />
-            </div>
-            <span>Selected</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 bg-gray-300 rounded flex items-center justify-center">
-              <User className="h-3 w-3 text-gray-500" />
-            </div>
-            <span>Booked</span>
-          </div>
-        </div>
-
-        {selectedSeats.length > 0 && (
-          <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-            <h4 className="font-medium text-blue-900 mb-2">Selected Seats:</h4>
-            <div className="flex flex-wrap gap-2">
-              {selectedSeats.map((seat) => (
-                <Badge key={seat} variant="default">
-                  Seat {seat}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+      )}
+    </div>
   );
 }

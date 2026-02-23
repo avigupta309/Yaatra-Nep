@@ -111,3 +111,30 @@ export interface BusInfo {
   type: string;
   amenities: string[];
 }
+
+// export interface bookedTicket {
+//   busName: string;
+//   busId: string;
+//   seat: string[];
+//   mobileNo: string;
+//   name: string;
+//   from: string;
+//   to: string;
+// }
+
+export interface ticketDetailsProps {
+  busId: {
+    busName: string;
+    busNumber: string;
+    type: String;
+    source: string;
+    destination: string;
+    departureTime: string;
+    arrivalTime: string;
+    farePerSeat: number;
+    operator: string;
+  };
+  seats: string[];
+  totalAmount: number;
+  bookingStatus: string;
+}

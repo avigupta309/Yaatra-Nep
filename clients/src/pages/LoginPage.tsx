@@ -28,7 +28,6 @@ export const LoginPage: React.FC = () => {
         data,
         { withCredentials: true }
       );
-      console.log(response.data.user);
       setAuthUser(response.data.user);
       toast.success(`Login Sucessfully mr/ms ${response.data.user?.fullName}`);
       setTimeout(() => {

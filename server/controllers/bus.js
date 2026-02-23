@@ -38,7 +38,6 @@ export async function HandleBusSubmitData(req, res) {
         await BusModel.create({
             busName, busNumber, type, source, destination, departureTime, arrivalTime, farePerSeat, totalSeats, availableSeats, amenities, operator, busDriver, seatLayout
         })
-        console.log(source, destination)
 
 
         return res.status(201).json({ data: `${busName}'s :${busNumber} data added Sucessfully` })
@@ -121,7 +120,8 @@ export async function HandleBusEdit(req, res) {
 
 export async function ViewAllBus(req, res) {
     try {
-        const bus = await BusModel.find({})
+        const bus = await BusModel.find({}).populate("busDriver");
+        console.log(bus)
         if (bus) return res.status(200).json({ data: "All Bus", bus: bus })
         return null
     } catch (error) {
