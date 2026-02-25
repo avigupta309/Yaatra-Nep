@@ -107,3 +107,15 @@ export async function viewAllUser(req, res) {
     return res.status(500).json({ data: "Something Went Wrong" });
   }
 }
+
+export async function handleChangeRole(req, res) {
+  const { email, role } = req.body;
+  try {
+    const user = await userModel.findOne({ email: email });
+    if (!user) return res.status(401).json({ data: "plz Enter Valid Email" });
+    const updatedUser = await userModel.findOneAndUpdate({ email }, { role });
+    return res.status(201).json({ data: updatedUser });
+  } catch (error) {
+    return res.status(500).json({ data: "Something Went Wrong" });
+  }
+}

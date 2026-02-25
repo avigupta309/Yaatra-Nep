@@ -2,6 +2,7 @@ import { Edit } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { UserModal } from "./modal/user";
+import { Link } from "react-router-dom";
 interface userProps {
   fullName: string;
   email: string;
@@ -74,12 +75,14 @@ export function Users() {
                     </span>
                   </td>
                   <td className="text-red-500 hover:text-red-600">
-                    <Edit
-                      onClick={() => {
-                        setViewUser(!viewUser);
-                      }}
-                      height={25}
-                    />
+                    <Link to={"/abc"}>
+                      <Edit
+                        onClick={() => {
+                          setViewUser(!viewUser);
+                        }}
+                        height={25}
+                      />
+                    </Link>
                   </td>
                 </tr>
               ))

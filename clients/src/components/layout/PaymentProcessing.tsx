@@ -2,11 +2,14 @@ import React, { useState, ChangeEvent } from "react";
 import { Upload, CheckCircle2, BusFront } from "lucide-react";
 import { useAuth } from "../../hooks/Auth";
 import axios from "axios";
-// import { bookedTicket } from "../../types";
+import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const PaymentProcessing: React.FC = () => {
   const [screenshot, setScreenshot] = useState<File | null>(null);
   const { userInfo } = useAuth();
+  console.log(userInfo)
+  const navigate = useNavigate();
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -15,7 +18,9 @@ const PaymentProcessing: React.FC = () => {
 
   const handlePaymentSubmit = async () => {
     if (!screenshot) {
-      alert("⚠️ Please upload your payment screenshot before continuing.");
+      toast.error(
+        "⚠️ Please upload your payment screenshot before continuing.",
+      );
       return;
     }
 
@@ -24,10 +29,11 @@ const PaymentProcessing: React.FC = () => {
         `http://localhost:3000/api/bookedticket`,
         userInfo,
       );
-      console.log(response.data)
+      toast.success("Wow Payment Sucessfull !!");
+      navigate("/");
+      console.log(response.data);
     } catch (error) {}
   };
-
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-sky-50 to-indigo-100 p-6 animate-fade-in">
@@ -125,6 +131,7 @@ const PaymentProcessing: React.FC = () => {
           </button>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

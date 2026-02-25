@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Save, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 
@@ -23,6 +24,12 @@ export function UserModal({ closeModal }: ModalProps) {
 
   const onSubmit = async (data: UserFormInputs) => {
     console.log("Submitted Data:", data);
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/user/changerole",
+      );
+      console.log(response.data);
+    } catch (error) {}
 
     reset();
   };
@@ -46,7 +53,6 @@ export function UserModal({ closeModal }: ModalProps) {
             )}
           </div>
 
-          {/* Phone */}
           <div>
             <label className="block mb-1 font-medium">Phone Number</label>
             <input
@@ -60,7 +66,6 @@ export function UserModal({ closeModal }: ModalProps) {
             )}
           </div>
 
-          {/* Address */}
           <div>
             <label className="block mb-1 font-medium">Address</label>
             <input
@@ -87,7 +92,6 @@ export function UserModal({ closeModal }: ModalProps) {
             </select>
           </div>
 
-          {/* Profile Pic */}
           <div>
             <label className="block mb-1 font-medium">Profile Picture</label>
             <input
@@ -98,21 +102,20 @@ export function UserModal({ closeModal }: ModalProps) {
             />
           </div>
 
-          {/* Buttons */}
           <div className="flex justify-end gap-3 pt-4">
             <button
               onClick={closeModal}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+              className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition"
             >
               <span className="flex">
-                Cancel
+                close
                 <X />
               </span>
             </button>
 
             <button
               type="submit"
-              className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition"
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
             >
               <span className="flex">
                 Save

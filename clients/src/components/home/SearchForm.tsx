@@ -6,9 +6,6 @@ import { DisplayDate } from "../layout/DisplayDate";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 
-// interface SearchFormProps {
-//   onSearch: (filters: SearchFilters) => void;
-// }
 
 interface FormValues {
   source: string;
@@ -16,7 +13,6 @@ interface FormValues {
   type?: "AC" | "Non-AC";
 }
 
-// export function SearchForm({ onSearch }: SearchFormProps) {
 export function SearchForm(){
   const [isSwapping, setIsSwapping] = useState(false);
   const [, setCookies] = useCookies(["busData"]);
@@ -68,7 +64,6 @@ export function SearchForm(){
       updateAt:Date.now()
     };
     // onSearch(searchFilters);
-    console.log(searchFilters);
     setCookies("busData", searchFilters, { path: "/" });
   };
 

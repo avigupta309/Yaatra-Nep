@@ -2,8 +2,6 @@ import { BookingModel } from "../models/booking.js";
 
 export async function handleBookedTiicket(req, res) {
   const { busId, seat, userId, ticketAmount, useremail } = req.body;
-  console.log("ticket booked here");
-  console.log(busId, seat, userId, ticketAmount, useremail);
   await BookingModel.create({
     user: userId,
     busId: busId,
