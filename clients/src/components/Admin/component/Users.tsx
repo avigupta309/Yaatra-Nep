@@ -2,8 +2,8 @@ import { Edit } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { UserModal } from "./modal/user";
-import { Link } from "react-router-dom";
 interface userProps {
+  _id: string;
   fullName: string;
   email: string;
   role: string;
@@ -12,8 +12,8 @@ interface userProps {
 
 export function Users() {
   const [users, setUsers] = useState<userProps[]>([]);
+  const [userId, setUserId] = useState<string>("");
   const [viewUser, setViewUser] = useState<boolean>(false);
-  console.log(viewUser);
   useEffect(() => {
     async function fetchUser() {
       try {
@@ -21,6 +21,7 @@ export function Users() {
           "http://localhost:3000/api/user/viewuser",
         );
         setUsers(response.data.users);
+        console.log(response.data);
       } catch (error) {}
     }
     fetchUser();
@@ -75,21 +76,22 @@ export function Users() {
                     </span>
                   </td>
                   <td className="text-red-500 hover:text-red-600">
-                    <Link to={"/abc"}>
-                      <Edit
-                        onClick={() => {
-                          setViewUser(!viewUser);
-                        }}
-                        height={25}
-                      />
-                    </Link>
+                    <Edit
+                      onClick={() => {
+                        setViewUser(!viewUser);
+                        setUserId(user._id);
+                      }}
+                      height={25}
+                    />
                   </td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
-        {viewUser && <UserModal closeModal={() => setViewUser(false)} />}
+        {viewUser && (
+          <UserModal closeModal={() => setViewUser(false)} userId={userId} />
+        )}
       </div>
     </div>
   );

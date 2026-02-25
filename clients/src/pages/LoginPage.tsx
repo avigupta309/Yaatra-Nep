@@ -35,7 +35,6 @@ export const LoginPage: React.FC = () => {
         navigate("/");
       }, 1000);
 
-      // eslint-disable-next-line
     } catch (error: any) {
       toast.error(error?.response.data.data || "wrong password");
     }

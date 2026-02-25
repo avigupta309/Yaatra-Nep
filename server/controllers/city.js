@@ -14,7 +14,6 @@ export async function HandleCityAdded({ source, destination }) {
         const formattedSource = capitalizeWords(source);
         const formattedDestination = capitalizeWords(destination);
 
-        console.log("Adding cities:", formattedSource, formattedDestination);
 
         await cityModel.updateOne(
             {},

@@ -56,7 +56,6 @@ userSchema.methods.matchPassword = function (typePassword) {
     const user = this
     const UserHashPassword = createHmac("sha256", user.salt).update(typePassword.trim()).digest("hex")
     const isValidUser = UserHashPassword === user.password
-    console.log(isValidUser+"okkkkkkkkkkkkkkk")
    if (!isValidUser) {
      throw new Error("Invalid password");
    }

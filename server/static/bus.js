@@ -2,7 +2,6 @@ import { BusModel } from "../models/bus.js"
 
 export async function HandleSpecificBus(req, res) {
     const { id } = req.params
-    console.log(id)
     try {
         const bus = await BusModel.findById(id).populate("busDriver")
         return res.status(200).json({ bus: bus })
@@ -15,7 +14,6 @@ export async function HandleSpecificBus(req, res) {
 export async function filterBus(req, res) {
     const { source, destination, type } = req.query
     try {
-        console.log(source, destination, type)
         if (type !== "" && !undefined) {
             const filterBus = await BusModel.find({ source: source, destination: destination, type: type })
             return res.status(200).json({ data: "operation pass", filterBus: filterBus })

@@ -9,8 +9,9 @@ import AboutPage from "./pages/AboutPage";
 import { useCheckAuth } from "./hooks/CheckAuth";
 import { useAuth } from "./hooks/Auth";
 import { ToastContainer } from "react-toastify";
-import {UserProfile} from './components/User/Profile'
-import {AdminSettingsPage} from "./pages/SettingPage";
+import { UserProfile } from "./components/User/Profile";
+import { AdminSettingsPage } from "./pages/SettingPage";
+// import { UserModal } from "./components/Admin/component/modal/user";
 
 function App() {
   const { logged } = useAuth();
@@ -29,19 +30,18 @@ function App() {
               path="/selectionbus/:id"
               element={logged ? <SelectionBus /> : <LoginPage />}
             />
-         
+
             <Route
               path="/PaymentProcessing"
               element={logged ? <PaymentProcessing /> : <LoginPage />}
             />
             <Route path="/about-us" element={<AboutPage />} />
 
+            {/* <Route path="/edituser/:id" element={<UserModal/>} /> */}
 
+            <Route path="/profile" element={<UserProfile />} />
 
-            <Route path="/profile" element={<UserProfile/>}/>
-
-            <Route path="/settings" element={<AdminSettingsPage />} />
-
+            <Route path="/settings" element={logged?<AdminSettingsPage />:<LoginPage/>} />
           </Routes>
         </main>
       </div>

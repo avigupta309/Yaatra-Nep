@@ -1,20 +1,31 @@
 import axios from "axios";
 import { Save, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface ModalProps {
   closeModal: () => void;
+  userId: string;
+}
+
+interface userProps {
+  fullName: string;
+  phoneNumber: string;
+  email: string;
+  role: string;
+  profilePic: FileList;
 }
 
 interface UserFormInputs {
   fullName: string;
   phoneNumber: string;
-  address: string;
   role: string;
   profilePic: FileList;
+  email: string;
 }
 
-export function UserModal({ closeModal }: ModalProps) {
+export function UserModal({ closeModal, userId }: ModalProps) {
+  const [user, setUser] = useState<userProps>();
   const {
     register,
     handleSubmit,
@@ -22,11 +33,33 @@ export function UserModal({ closeModal }: ModalProps) {
     formState: { errors },
   } = useForm<UserFormInputs>();
 
+  useEffect(() => {
+    async function fetchUser() {
+      console.log(userId);
+      const response = await axios.get(
+        `http://localhost:3000/api/user/viewoneuser/${userId}`,
+      );
+      const userData = response.data.data;
+      setUser(userData);
+      reset({
+        email: userData.email,
+        fullName: userData.fullName,
+        phoneNumber: userData.phoneNumber,
+        role: userData.role,
+        profilePic: userData.profilePic,
+      });
+    }
+
+    fetchUser();
+  }, [userId, reset]);
+
   const onSubmit = async (data: UserFormInputs) => {
+    console.log(userId);
     console.log("Submitted Data:", data);
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/user/changerole",
+      const response = await axios.put(
+        `http://localhost:3000/api/user/changerole/${userId}`,
+        data,
       );
       console.log(response.data);
     } catch (error) {}
@@ -67,14 +100,14 @@ export function UserModal({ closeModal }: ModalProps) {
           </div>
 
           <div>
-            <label className="block mb-1 font-medium">Address</label>
+            <label className="block mb-1 font-medium">Email</label>
             <input
-              {...register("address", { required: "Adress is required" })}
+              {...register("email", { required: "Email is required" })}
               className="w-full border rounded-lg px-4 py-3 pr-10 focus:ring-2 focus:ring-blue-500 outline-none"
             />
-            {errors.address && (
+            {errors.email && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.address.message}
+                {errors.email.message}
               </p>
             )}
           </div>

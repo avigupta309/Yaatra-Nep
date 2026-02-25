@@ -109,12 +109,32 @@ export async function viewAllUser(req, res) {
 }
 
 export async function handleChangeRole(req, res) {
+  const { id } = req.params;
+  console.log("userId-----", id);
   const { email, role } = req.body;
+  console.log(req.body);
   try {
     const user = await userModel.findOne({ email: email });
     if (!user) return res.status(401).json({ data: "plz Enter Valid Email" });
-    const updatedUser = await userModel.findOneAndUpdate({ email }, { role });
+    const updatedUser = await userModel.findOneAndUpdate(
+      { email },
+      { role },
+      { new: true },
+    );
     return res.status(201).json({ data: updatedUser });
+  } catch (error) {
+    return res.status(500).json({ data: "Something Went Wrong" });
+  }
+}
+
+export async function ViewOneUSer(req, res) {
+  const { id } = req.params;
+  console.log(id);
+  console.log("for testing......")
+  try {
+    const user = await userModel.findById(id);
+    if (!user) return res.status(401).json({ data: "plz Select Correct User" });
+    return res.status(201).json({ data: user });
   } catch (error) {
     return res.status(500).json({ data: "Something Went Wrong" });
   }
