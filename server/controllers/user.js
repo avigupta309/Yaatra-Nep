@@ -62,25 +62,33 @@ export async function HandleUserInfo(req, res) {
   }
 }
 
-export async function HandleUserEdit(req, res) {
-  let { fullName, email, phoneNumber, password } = req.body;
+export async function changePassword(req, res) {
+  const { email, password, newPassword } = req.body;
+
   try {
-    const user = await userModel.findOne({ email: email });
+    const user = await userModel.findOne({ email });
     if (!user) return res.status(400).json({ data: "Enter Valid Email" });
-    const salt = randomBytes(16).toString("hex");
-    const hashPassword = createHmac("sha256", salt)
-      .update(password)
-      .digest("hex");
-    password = hashPassword;
-    const editedUser = await userModel.findOneAndUpdate(
-      { email },
-      { fullName, phoneNumber, password, salt },
-      { new: true },
-    );
-    return res
-      .status(200)
-      .json({ data: "user Edited Sucessfully", user: editedUser });
-  } catch (error) {}
+
+    user.matchPassword(password);
+
+    if (password === newPassword) {
+      return res.status(400).json({
+        data: "New password cannot be same as old password",
+      });
+    }
+
+    user.password = newPassword.trim();
+
+    await user.save();
+
+    return res.status(200).json({
+      data: "Password Changed Successfully",
+    });
+  } catch (error) {
+    return res.status(401).json({
+      data: error.message || "Something Went Wrong",
+    });
+  }
 }
 
 export async function HandleUserDelete(req, res) {
@@ -114,8 +122,8 @@ export async function handleChangeRole(req, res) {
   const { email, role, fullName, phoneNumber } = req.body;
   console.log(req.body);
   try {
-    // const user = await userModel.findOne({ email: email });
-    // if (!user) return res.status(401).json({ data: "plz Enter Valid Email" });
+    const user = await userModel.findOne({ email: email });
+    if (!user) return res.status(401).json({ data: "plz Enter Valid Email" });
     const updatedUser = await userModel.findByIdAndUpdate(
       id,
       { role, fullName, phoneNumber, email },

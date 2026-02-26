@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
   HandleUserDelete,
-  HandleUserEdit,
+  changePassword,
   HandleUserInfo,
   HandleLogin,
   HandleUserSignUp,
@@ -15,7 +15,7 @@ export const UserRouter = Router();
 UserRouter.post("/login", HandleLogin);
 UserRouter.post("/usersignup", HandleUserSignUp);
 UserRouter.post("/specificuser", HandleUserInfo);
-UserRouter.put("/useredit", HandleUserEdit);
+UserRouter.put("/channgepwd", changePassword);
 UserRouter.delete("/userdelete", HandleUserDelete);
 UserRouter.get("/viewuser", viewAllUser);
 UserRouter.put("/changerole/:id", handleChangeRole);
