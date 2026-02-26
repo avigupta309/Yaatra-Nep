@@ -111,15 +111,15 @@ export async function viewAllUser(req, res) {
 export async function handleChangeRole(req, res) {
   const { id } = req.params;
   console.log("userId-----", id);
-  const { email, role } = req.body;
+  const { email, role, fullName, phoneNumber } = req.body;
   console.log(req.body);
   try {
-    const user = await userModel.findOne({ email: email });
-    if (!user) return res.status(401).json({ data: "plz Enter Valid Email" });
-    const updatedUser = await userModel.findOneAndUpdate(
-      { email },
-      { role },
-      { new: true },
+    // const user = await userModel.findOne({ email: email });
+    // if (!user) return res.status(401).json({ data: "plz Enter Valid Email" });
+    const updatedUser = await userModel.findByIdAndUpdate(
+      id,
+      { role, fullName, phoneNumber, email },
+      { new: true, runValidators: true },
     );
     return res.status(201).json({ data: updatedUser });
   } catch (error) {
@@ -129,8 +129,6 @@ export async function handleChangeRole(req, res) {
 
 export async function ViewOneUSer(req, res) {
   const { id } = req.params;
-  console.log(id);
-  console.log("for testing......")
   try {
     const user = await userModel.findById(id);
     if (!user) return res.status(401).json({ data: "plz Select Correct User" });

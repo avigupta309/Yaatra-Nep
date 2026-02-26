@@ -1,5 +1,5 @@
 import { Bus } from "./component/Bus";
-import { BusAdd } from "./component/BusFrom";
+import { BusAdd } from "./component/BusForm";
 import { Users } from "./component/Users";
 
 export const AdminDashboard = () => {

@@ -6,6 +6,7 @@ import { BusModal } from "./modal/Bus";
 
 export function Bus() {
   const [bus, setBus] = useState<BusInfo[]>([]);
+  const [busId, setBusId] = useState<string>("");
   const [viewModal, setViewModal] = useState<boolean>(false);
   useEffect(() => {
     async function fetchBus() {
@@ -50,14 +51,27 @@ export function Bus() {
                   <td>{bus.operator}</td>
                   <td>{bus.busNumber}</td>
                   <td className="text-red-500 hover:text-red-600">
-                    <Edit onClick={()=>{setViewModal(!viewModal)}} height={25} />
+                    <Edit
+                      onClick={() => {
+                        setViewModal(!viewModal);
+                        setBusId(bus._id);
+                      }}
+                      height={25}
+                    />
                   </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
-        {viewModal && <BusModal viewModal={()=>{setViewModal(false)}}/> }
+        {viewModal && (
+          <BusModal
+            viewModal={() => {
+              setViewModal(false);
+            }}
+            busId={busId}
+          />
+        )}
       </div>
     </div>
   );

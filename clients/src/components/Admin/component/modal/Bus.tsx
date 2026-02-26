@@ -1,12 +1,16 @@
 import { Save, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { BusFormInputs } from "../../../../types/busform";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { BusInfo } from "../../../../types";
 interface ModalProps {
   viewModal: () => void;
+  busId: string;
 }
 
-
-export function BusModal({ viewModal }: ModalProps) {
+export function BusModal({ viewModal, busId }: ModalProps) {
+  const [bus, setBus] = useState<BusInfo>();
   const {
     register,
     handleSubmit,
@@ -14,11 +18,50 @@ export function BusModal({ viewModal }: ModalProps) {
     formState: { errors },
   } = useForm<BusFormInputs>();
 
+  useEffect(() => {
+    async function FetchBus() {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/bus/specificbus/${busId}`,
+        );
+        const busData = response.data.bus;
+        reset({
+          busName: busData.busName,
+          busNumber: busData.busNumber,
+          latitude: busData.lattitude,
+          longitude: busData.longititude,
+          type: busData.type,
+          source: busData.source,
+          destination: busData.destination,
+          departureTime: busData.departureTime,
+          arrivalTime: busData.arrivalTime,
+          farePerSeat: busData.farePerSeat,
+          totalSeats: busData.totalSeats,
+          amenities: busData.amenities,
+          operator: busData.operator,
+          driverName: busData.busDriver.driverName,
+          driverEmail: busData.busDriver.email,
+          driverPhoneNumber: busData.busDriver.phoneNumber,
+          driverAddress: busData.busDriver.address,
+        });
+      } catch (error) {}
+    }
+    FetchBus();
+  }, [busId]);
+
   const inputFielsStyle =
     "w-full border rounded-lg px-4 py-3 pr-10 focus:ring-2 focus:ring-blue-500 outline-none";
 
   const onSubmit = async (data: BusFormInputs) => {
     console.log("Bus Submitted:", data);
+
+    try {
+      const response = await axios.put(
+        "http://localhost:3000/api/bus/busedit",
+        data,
+      );
+      console.log(response.data);
+    } catch (error) {}
 
     reset();
     viewModal();
@@ -30,7 +73,7 @@ export function BusModal({ viewModal }: ModalProps) {
         className="modal-box w-11/12 max-w-4xl bg-white text-black overflow-y-auto max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="font-bold text-xl mb-4 text-blue-700">Add New Bus</h3>
+        <h3 className="font-bold text-xl mb-4 text-blue-700">Edit Bus</h3>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Bus Details */}
