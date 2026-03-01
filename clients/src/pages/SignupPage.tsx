@@ -39,7 +39,6 @@ export const SignupPage: React.FC = () => {
         data
       );
 
-      console.log(response);
       setUserSignUp(response.data);
 
       if (response.status === 409) {
@@ -48,7 +47,6 @@ export const SignupPage: React.FC = () => {
       if (response.status == 400) {
         toast.error(response.data.data || "Invalid input.");
       }
-      // eslint-disable-next-line
     } catch (error: any) {
       console.error("Signup error:", error);
       toast.error(error.response?.data?.data || "Server error during signup.");

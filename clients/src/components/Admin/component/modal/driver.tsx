@@ -5,58 +5,48 @@ import { useForm } from "react-hook-form";
 
 interface ModalProps {
   closeModal: () => void;
-  userId: string;
+  driverId: string;
 }
 
-interface userProps {
-  fullName: string;
+interface driverProps {
+  driverName: string;
   phoneNumber: string;
   email: string;
-  role: string;
+  password: string;
   profilePic: FileList;
 }
 
-interface UserFormInputs {
-  fullName: string;
-  phoneNumber: string;
-  role: string;
-  profilePic: FileList;
-  email: string;
-}
-
-export function UserModal({ closeModal, userId }: ModalProps) {
-  const [user, setUser] = useState<userProps>();
+export function DriverModal({ closeModal, driverId }: ModalProps) {
+  const [_, setDriver] = useState<driverProps>();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<UserFormInputs>();
+  } = useForm<driverProps>();
 
   useEffect(() => {
     async function fetchUser() {
       const response = await axios.get(
-        `http://localhost:3000/api/user/viewoneuser/${userId}`,
+        `http://localhost:3000/api/driver/specificdriver/${driverId}`,
       );
-      const userData = response.data.data;
-      setUser(userData);
+      const driverData = response.data.driver;
+      setDriver(driverData);
       reset({
-        email: userData.email,
-        fullName: userData.fullName,
-        phoneNumber: userData.phoneNumber,
-        role: userData.role,
-        profilePic: userData.profilePic,
+        email: driverData.email,
+        driverName: driverData.driverName,
+        phoneNumber: driverData.phoneNumber,
       });
     }
 
     fetchUser();
-  }, [userId, reset]);
+  }, [driverId, reset]);
 
-  const onSubmit = async (data: UserFormInputs) => {
+  const onSubmit = async (data: driverProps) => {
 
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/user/changerole/${userId}`,
+        `http://localhost:3000/api/user/changerole/${driverId}`,
         data,
       );
     } catch (error) {}
@@ -73,12 +63,12 @@ export function UserModal({ closeModal, userId }: ModalProps) {
           <div>
             <label className="block mb-1 font-medium">Full Name</label>
             <input
-              {...register("fullName", { required: "Name is required" })}
+              {...register("driverName", { required: "Name is required" })}
               className="w-full border rounded-lg px-4 py-3 pr-10 focus:ring-2 focus:ring-blue-500 outline-none"
             />
-            {errors.fullName && (
+            {errors.driverName && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.fullName.message}
+                {errors.driverName.message}
               </p>
             )}
           </div>
@@ -108,20 +98,6 @@ export function UserModal({ closeModal, userId }: ModalProps) {
               </p>
             )}
           </div>
-
-          {/* Role */}
-          <div>
-            <label className="block mb-1 font-medium">Role</label>
-            <select
-              className="w-full border rounded-lg px-4 py-3 pr-10 focus:ring-2 focus:ring-blue-500 outline-none bg-white cursor-pointer"
-              {...register("role")}
-            >
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-              <option value="driver">Driver</option>
-            </select>
-          </div>
-
           <div>
             <label className="block mb-1 font-medium">Profile Picture</label>
             <input

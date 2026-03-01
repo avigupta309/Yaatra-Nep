@@ -27,48 +27,37 @@ export const UserProfile: React.FC = () => {
   } = useForm<authProps>();
 
   const onSubmit = async (data: authProps) => {
-    console.log(data);
     try {
-      // const formData = new FormData();
-      // formData.append("fullName", data.fullName);
-      // formData.append("oldPassword", data.password);
-      // formData.append("newPassword", data.newPassword);
-
-      // if (data.profilePic && data.profilePic[0]) {
-      //   formData.append("profilePic", data.profilePic[0]);
-      // }
-
-      const response = await axios.put(
-        `http://localhost:3000/api/user/channgepwd/`,
-        data,
-      );
-      console.log(response.data);
+      await axios.put(`http://localhost:3000/api/user/channgepwd/`, data);
+      alert("Profile updated successfully ✅");
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    async function fetChUser() {
+    if (!userId) return;
+
+    async function fetchUser() {
       try {
         const response = await axios.get(
           `http://localhost:3000/api/user/viewoneuser/${userId}`,
         );
 
         const userData = response.data.data;
-        console.log(userData);
 
         reset({
           fullName: userData.fullName,
           email: userData.email,
         });
+
         setProfileImage(userData.profilePic);
       } catch (error) {
         console.error(error);
       }
     }
 
-    if (userId) fetChUser();
+    fetchUser();
   }, [userId, reset]);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -81,126 +70,126 @@ export const UserProfile: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-screen bg-gray-100 flex items-center justify-center p-3">
-      <div className="flex flex-col md:flex-row gap-8 max-w-5xl w-full">
-        <div className="bg-white rounded-xl p-4 shadow-lg flex-1 h-screen">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex flex-col items-center text-center">
-              <label htmlFor="image-upload" className="relative cursor-pointer">
-                <img
-                  src={profileImage || "/default-avatar.png"}
-                  alt="Profile"
-                  className="w-32 h-32 rounded-full object-cover border shadow"
-                />
-                <div className="absolute bottom-2 right-2 bg-white text-blue-600 rounded-full p-2 shadow">
-                  <Camera size={18} />
-                </div>
-              </label>
-
-              <input
-                type="file"
-                id="image-upload"
-                accept="image/*"
-                className="hidden"
-                {...register("profilePic")}
-                onChange={(e) => {
-                  handleImageChange(e);
-                }}
+    <div className="min-h-screen bg-gray-100 py-10 px-4">
+      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
+        {/* LEFT: PROFILE CARD */}
+        <div className="bg-white rounded-2xl shadow-xl p-8">
+          {/* Profile Header */}
+          <div className="flex flex-col items-center text-center mb-6">
+            <label
+              htmlFor="image-upload"
+              className="relative cursor-pointer group"
+            >
+              <img
+                src={profileImage || "/default-avatar.png"}
+                alt="Profile"
+                className="w-32 h-32 rounded-full object-cover border-4 border-indigo-100 shadow-md"
               />
+              <div className="absolute bottom-2 right-2 bg-indigo-600 text-white rounded-full p-2 shadow-md group-hover:scale-110 transition">
+                <Camera size={16} />
+              </div>
+            </label>
 
-              <h2 className="text-2xl font-bold text-gray-800">
-                {authUser?.fullName}
-              </h2>
-              <p className="text-sm text-gray-500">Team Leader</p>
+            <input
+              type="file"
+              id="image-upload"
+              accept="image/*"
+              className="hidden"
+              {...register("profilePic")}
+              onChange={handleImageChange}
+            />
+
+            <h2 className="text-2xl font-bold mt-4 text-gray-800">
+              {authUser?.fullName}
+            </h2>
+            <p className="text-gray-500 text-sm">{authUser?.email}</p>
+          </div>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div>
+              <label className="block font-medium mb-1">Full Name</label>
+              <input
+                type="text"
+                {...register("fullName", {
+                  required: "Full name is required",
+                })}
+                className="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none"
+              />
+              {errors.fullName && (
+                <p className="text-red-500 text-sm">
+                  {errors.fullName.message}
+                </p>
+              )}
             </div>
 
-            <div className="space-y-4">
-              {/* Full Name */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-1">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  {...register("fullName", {
-                    required: "Full name is required",
-                  })}
-                  className="w-full border rounded-lg px-4 py-3"
-                />
-                {errors.fullName && (
-                  <p className="text-red-500 text-sm">
-                    {errors.fullName.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-1">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  readOnly
-                  {...register("email")}
-                  className="w-full border rounded-lg px-4 py-3 bg-gray-100"
-                />
-              </div>
-
-              {/* Old Password */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-1">
-                  Old Password
-                </label>
-                <input
-                  type="password"
-                  {...register("password", {
-                    required: "Old password is required",
-                  })}
-                  className="w-full border rounded-lg px-4 py-3"
-                />
-                {errors.password && (
-                  <p className="text-red-500 text-sm">
-                    {errors.password.message}
-                  </p>
-                )}
-              </div>
-
-              {/* New Password */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-1">
-                  New Password
-                </label>
-                <input
-                  type="password"
-                  {...register("newPassword", {
-                    required: "New password is required",
-                    minLength: {
-                      value: 6,
-                      message: "Minimum 6 characters required",
-                    },
-                  })}
-                  className="w-full border rounded-lg px-4 py-3"
-                />
-                {errors.newPassword && (
-                  <p className="text-red-500 text-sm">
-                    {errors.newPassword.message}
-                  </p>
-                )}
-              </div>
+            {/* Email */}
+            <div>
+              <label className="block font-medium mb-1">Email</label>
+              <input
+                type="email"
+                readOnly
+                {...register("email")}
+                className="w-full border rounded-lg px-4 py-3 bg-gray-100"
+              />
             </div>
 
+            <hr className="my-4" />
+
+            <h3 className="text-lg font-semibold text-blue-600">
+              Change Password
+            </h3>
+
+            {/* Old Password */}
+            <div>
+              <label className="block font-medium mb-1">Old Password</label>
+              <input
+                type="password"
+                {...register("password", {
+                  required: "Old password is required",
+                })}
+                className="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+              {errors.password && (
+                <p className="text-red-500 text-sm">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label className="block font-medium mb-1">New Password</label>
+              <input
+                type="password"
+                {...register("newPassword", {
+                  required: "New password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Minimum 6 characters required",
+                  },
+                })}
+                className="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+              {errors.newPassword && (
+                <p className="text-red-500 text-sm">
+                  {errors.newPassword.message}
+                </p>
+              )}
+            </div>
+
+            {/* Save Button */}
             <button
               type="submit"
               className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition mt-4"
             >
               <Save size={18} />
-              Save Profile
+              Save Changes
             </button>
           </form>
         </div>
 
-        <SelectedBus />
+        <div>
+          <SelectedBus />
+        </div>
       </div>
     </div>
   );

@@ -14,7 +14,6 @@ export function Bus() {
         const response = await axios.get(
           "http://localhost:3000/api/bus/viewbus",
         );
-        console.log(response.data.bus);
         setBus(response.data.bus);
       } catch (error) {}
     }
@@ -46,7 +45,7 @@ export function Bus() {
                     {i + 1}. {bus.busName}
                   </td>
                   <td className="px-4 py-3 text-gray-600">
-                    {bus.busDriver.driverName}
+                    {bus.busDriverId.driverName}
                   </td>
                   <td>{bus.operator}</td>
                   <td>{bus.busNumber}</td>

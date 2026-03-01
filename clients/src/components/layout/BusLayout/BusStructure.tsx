@@ -10,7 +10,7 @@ const BusStructure = ({ busFeatures }: busProps) => {
   const { setUserInfo, authUser } = useAuth();
   const { id } = useParams<{ id: string }>();
   const ButtonStyle =
-    "w-12 h-12 text-sm font-bold rounded border-2 cursor-pointer transition-all duration-200 flex items-center justify-center ";
+    "w-12 h-12 text-sm font-bold rounded border-2 cursor-pointer transition-all duration-200 flex items-center justify-center text-white";
 
   const handleSeatClick = (seatNumber: string) => {
     if (selectedSeats.includes(seatNumber)) {

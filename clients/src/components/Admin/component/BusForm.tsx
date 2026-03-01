@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { BusFormInputs } from "../../../types/busform";
 import { Save, X } from "lucide-react";
+import axios from "axios";
 
 export function BusAdd() {
-  console.log("busAdd");
   const {
     register,
     handleSubmit,
@@ -13,9 +13,15 @@ export function BusAdd() {
 
   const inputFielsStyle =
     "w-full border rounded-lg px-4 py-3 pr-10 focus:ring-2 focus:ring-blue-500 outline-none";
-  const onSubmit = (data: BusFormInputs) => {
-    console.log(data);
-    reset();
+  const onSubmit = async (data: BusFormInputs) => {
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/bus/busupload",
+        data,
+      );
+    } catch (error) {}
+    // reset();
   };
 
   return (
@@ -52,7 +58,7 @@ export function BusAdd() {
             <input
               type="number"
               step="0.0001"
-              {...register("latitude", { required: "Latitude is required" })}
+              {...register("latitude", { required: "latitude is required" })}
               className={inputFielsStyle}
             />
             {errors.latitude && (
@@ -61,12 +67,12 @@ export function BusAdd() {
           </div>
 
           <div>
-            <label className="block mb-1 font-medium">Longitude</label>
+            <label className="block mb-1 font-medium">longitude</label>
             <input
               type="number"
               step="0.0001"
               {...register("longitude", {
-                required: "Longitude is required",
+                required: "longitude is required",
               })}
               className={inputFielsStyle}
             />
@@ -205,8 +211,6 @@ export function BusAdd() {
 
         {/* Buttons */}
         <div className="flex justify-end gap-3 pt-4">
-      
-
           <button
             type="submit"
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-1"

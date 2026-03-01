@@ -19,6 +19,5 @@ export function AdminSettingsPage() {
     }
     fetchUserRole();
   }, [userId]);
-  console.log(authUser);
   return <div>{userRole == "user" ? "" : <AdminDashboard />}</div>;
 }

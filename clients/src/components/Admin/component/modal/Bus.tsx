@@ -25,25 +25,30 @@ export function BusModal({ viewModal, busId }: ModalProps) {
           `http://localhost:3000/api/bus/specificbus/${busId}`,
         );
         const busData = response.data.bus;
-        reset({
-          busName: busData.busName,
-          busNumber: busData.busNumber,
-          latitude: busData.lattitude,
-          longitude: busData.longititude,
-          type: busData.type,
-          source: busData.source,
-          destination: busData.destination,
-          departureTime: busData.departureTime,
-          arrivalTime: busData.arrivalTime,
-          farePerSeat: busData.farePerSeat,
-          totalSeats: busData.totalSeats,
-          amenities: busData.amenities,
-          operator: busData.operator,
-          driverName: busData.busDriver.driverName,
-          driverEmail: busData.busDriver.email,
-          driverPhoneNumber: busData.busDriver.phoneNumber,
-          driverAddress: busData.busDriver.address,
-        });
+        setBus(busData)
+       reset({
+         busName: busData.busName,
+         busNumber: busData.busNumber,
+         latitude: busData.latitude,
+         longitude: busData.longitude,
+         type: busData.type,
+         source: busData.source,
+         destination: busData.destination,
+         departureTime: busData.departureTime,
+         arrivalTime: busData.arrivalTime,
+         farePerSeat: busData.farePerSeat,
+         totalSeats: busData.totalSeats,
+
+         // convert array → string for input
+         amenities: busData.amenities?.join(", "),
+
+         operator: busData.operator,
+
+         driverName: busData.busDriverId.driverName,
+         driverPhoneNumber: busData.busDriverId.phoneNumber,
+         driverAddress: busData.busDriverId.address,
+         busDriver: busData.busDriverId.email,
+       });
       } catch (error) {}
     }
     FetchBus();
@@ -53,15 +58,18 @@ export function BusModal({ viewModal, busId }: ModalProps) {
     "w-full border rounded-lg px-4 py-3 pr-10 focus:ring-2 focus:ring-blue-500 outline-none";
 
   const onSubmit = async (data: BusFormInputs) => {
-    console.log("Bus Submitted:", data);
 
     try {
       const response = await axios.put(
         "http://localhost:3000/api/bus/busedit",
         data,
       );
-      console.log(response.data);
-    } catch (error) {}
+    } catch (error: any) {
+      console.error(
+        "Error updating bus:",
+        error.response?.data || error.message,
+      );
+    }
 
     reset();
     viewModal();
@@ -243,7 +251,7 @@ export function BusModal({ viewModal, busId }: ModalProps) {
               <label className="block mb-1 font-medium">Driver Email</label>
               <input
                 type="email"
-                {...register("driverEmail", { required: true })}
+                {...register("busDriver", { required: true })}
                 className={inputFielsStyle}
               />
             </div>

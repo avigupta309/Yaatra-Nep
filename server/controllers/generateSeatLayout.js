@@ -1,5 +1,4 @@
 export function generateSeatLayout(rows) {
-    console.log("total rows is : "+rows)
     const layout = [];
     const leftColumn = ['A', 'B'];
     const rightColumn = ['C', 'D'];

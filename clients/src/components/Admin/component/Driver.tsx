@@ -1,7 +1,7 @@
 import { Edit } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { UserModal } from "./modal/user";
+import { DriverModal } from "./modal/driver";
 interface userProps {
   _id: string;
   fullName: string;
@@ -10,24 +10,24 @@ interface userProps {
   phoneNumber: string;
 }
 
-export function Users() {
-  const [users, setUsers] = useState<userProps[]>([]);
-  const [userId, setUserId] = useState<string>("");
-  const [viewUser, setViewUser] = useState<boolean>(false);
+export function Drivers() {
+  const [drivers, setDrivers] = useState<userProps[]>([]);
+  const [driverId, setDriverId] = useState<string>("");
+  const [viewDriver, setViewDriver] = useState<boolean>(false);
   useEffect(() => {
     async function fetchUser() {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/user/viewuser",
+          "http://localhost:3000/api/driver/viewalldriver",
         );
-        setUsers(response.data.users);
+        setDrivers(response.data.driver);
       } catch (error) {}
     }
     fetchUser();
   }, []);
   return (
     <div className="bg-white shadow-lg rounded-xl p-6">
-      <h2 className="text-xl font-bold mb-4 text-black">All Users</h2>
+      <h2 className="text-xl font-bold mb-4 text-black">All Drivers</h2>
       <div className="overflow-x-auto max-h-[400px] overflow-y-auto">
         <table className="min-w-full text-sm text-left border-collapse">
           <thead className="bg-blue-700 text-white sticky top-0">
@@ -35,50 +35,37 @@ export function Users() {
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Email</th>
               <th className="px-4 py-3">Phone</th>
-              <th className="px-4 py-3">Role</th>
               <th className="px-4 py-3">Action</th>
             </tr>
           </thead>
 
-          {/* BODY */}
           <tbody>
-            {users.length === 0 ? (
+            {drivers.length === 0 ? (
               <tr>
                 <td colSpan={4} className="text-center py-6 text-gray-500">
                   No users registered yet
                 </td>
               </tr>
             ) : (
-              users.map((user, i) => (
+              drivers.map((driver, i) => (
                 <tr
                   key={i}
                   className="border-b hover:bg-gray-100 transition cursor-pointer"
                 >
                   <td className="px-4 py-3 font-medium">
-                    {i + 1}. {user.fullName}
+                    {i + 1}. {driver.fullName}
                   </td>
 
-                  <td className="px-4 py-3 text-gray-600">{user.email}</td>
+                  <td className="px-4 py-3 text-gray-600">{driver.email}</td>
 
-                  <td className="px-4 py-3">{user.phoneNumber}</td>
+                  <td className="px-4 py-3">{driver.phoneNumber}</td>
 
-                  <td className="px-4 py-3">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold
-                    ${
-                      user.role === "admin"
-                        ? "bg-red-100 text-red-600"
-                        : "bg-green-100 text-green-600"
-                    }`}
-                    >
-                      {user.role}
-                    </span>
-                  </td>
+                  
                   <td className="text-red-500 hover:text-red-600">
                     <Edit
                       onClick={() => {
-                        setViewUser(!viewUser);
-                        setUserId(user._id);
+                        setViewDriver(!viewDriver);
+                        setDriverId(driver._id);
                       }}
                       height={25}
                     />
@@ -88,8 +75,11 @@ export function Users() {
             )}
           </tbody>
         </table>
-        {viewUser && (
-          <UserModal closeModal={() => setViewUser(false)} userId={userId} />
+        {viewDriver && (
+          <DriverModal
+            closeModal={() => setViewDriver(false)}
+            driverId={driverId}
+          />
         )}
       </div>
     </div>

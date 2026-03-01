@@ -1,5 +1,6 @@
 import { Bus } from "./component/Bus";
 import { BusAdd } from "./component/BusForm";
+import { Drivers } from "./component/Driver";
 import { Users } from "./component/Users";
 
 export const AdminDashboard = () => {
@@ -7,6 +8,7 @@ export const AdminDashboard = () => {
     <div className="min-h-screen bg-gray-100 p-6 space-y-6">
       <Users />
       <Bus />
+      <Drivers/>
       <div className="bg-white shadow-lg rounded-xl p-6">
         <h2 className="text-xl font-bold mb-4 text-black">Add New Bus</h2>
         <BusAdd />

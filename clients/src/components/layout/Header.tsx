@@ -15,14 +15,12 @@ import { toast } from "react-toastify";
 
 export function Header() {
   const { logged, theme, setTheme, authUser, setLogged } = useAuth();
-  const authRole = authUser?.role;
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const handleLogout = async () => {
-    const result = await axios.get("http://localhost:3000/api/logout", {
+    await axios.get("http://localhost:3000/api/logout", {
       withCredentials: true,
     });
-    console.log(result.data);
     toast.error(`Log Out Sucessflly mr/ms ${authUser?.fullName}`);
     setTimeout(() => {
       setLogged(false);
@@ -102,7 +100,6 @@ export function Header() {
                 <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-2 z-50">
                   {logged ? (
                     <>
-                      {console.log(logged)}
                       <Link
                         to="/profile"
                         className="px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center"

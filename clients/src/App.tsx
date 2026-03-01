@@ -15,7 +15,6 @@ import { AdminSettingsPage } from "./pages/SettingPage";
 
 function App() {
   const { logged } = useAuth();
-  console.log(logged);
   useCheckAuth();
   return (
     <BrowserRouter>

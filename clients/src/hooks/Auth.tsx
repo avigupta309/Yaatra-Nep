@@ -35,7 +35,6 @@ export const AuthProvider = ({ children }: childrenProps) => {
   const [logged, setLogged] = useState<boolean>();
   const [theme, setTheme] = useState<boolean | undefined>(true);
   const [userInfo, setUserInfo] = useState<userProps | null>(null);
-  console.log(userInfo);
   return (
     <authContext.Provider
       value={{

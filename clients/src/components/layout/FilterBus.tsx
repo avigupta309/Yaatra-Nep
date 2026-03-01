@@ -14,7 +14,6 @@ const FilterBus: React.FC = () => {
   const [isSearched, setIsSearched] = useState<boolean>(false);
   function handleRemoveCookie() {
     removeCookie("busData", { path: "/" });
-    console.log("busData cookie removed");
   }
   useEffect(() => {
     async function fetchFilterBusList() {

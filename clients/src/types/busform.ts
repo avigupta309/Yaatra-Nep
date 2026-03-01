@@ -16,4 +16,5 @@ export interface BusFormInputs {
   driverEmail: string;
   driverPhoneNumber: string;
   driverAddress: string;
+  busDriver: string;
 }

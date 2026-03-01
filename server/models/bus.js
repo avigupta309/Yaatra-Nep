@@ -1,99 +1,102 @@
 import mongoose, { Schema, model } from "mongoose";
 
 function capitalizeWords(str) {
-    return str
-        .trim()
-        .toLowerCase()
-        .split(' ')
-        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(' ');
+  return str
+    .trim()
+    .toLowerCase()
+    .split(" ")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
 }
-const busSchema = new Schema({
+const busSchema = new Schema(
+  {
     busName: {
-        type: String,
-        required: true,
-        trim: true,
+      type: String,
+      required: true,
+      trim: true,
     },
     busNumber: {
-        type: String,
-        trim: true,
-        required: true,
-        unique: true
+      type: String,
+      trim: true,
+      required: true,
+      unique: true,
     },
-    lattitude: {
-        type: Number,
-        trim: true,
-        default: 28.7041
+    latitude: {
+      type: Number,
+      trim: true,
+      default: 28.7041,
     },
-    longititude: {
-        type: Number,
-        trim: true,
-        default: 77.1025
+    longitude: {
+      type: Number,
+      trim: true,
+      default: 77.1025,
     },
     type: {
-        type: String,
-        enum: ['AC', 'Non-AC'],
-        default: "Non-AC",
-        required: true,
+      type: String,
+      enum: ["AC", "Non-AC"],
+      default: "Non-AC",
+      required: true,
     },
     source: {
-        type: String,
-        required: true,
-        trim: true,
-        set: capitalizeWords,
+      type: String,
+      required: true,
+      trim: true,
+      set: capitalizeWords,
     },
     destination: {
-        type: String,
-        required: true,
-        trim: true,
-        set: capitalizeWords,
+      type: String,
+      required: true,
+      trim: true,
+      set: capitalizeWords,
     },
     departureTime: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     arrivalTime: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     farePerSeat: {
-        type: Number,
-        required: true,
-        min: 0,
+      type: Number,
+      required: true,
+      min: 0,
     },
     totalSeats: {
-        type: Number,
-        required: true,
-        min: 1,
+      type: Number,
+      min: 1,
+      default: 10,
     },
     seatLayout: {
-        type: [
-            {
-                seatNumber: { type: String, required: true },
-                isAvailable: { type: Boolean, default: true }
-            }
-        ],
-        default: []
+      type: [
+        {
+          seatNumber: { type: String, required: true },
+          isAvailable: { type: Boolean, default: true },
+        },
+      ],
+      default: [],
     },
     availableSeats: {
-        type: Number,
-        required: true,
-        min: 0,
+      type: Number,
+      min: 0,
+      default: 10,
     },
     amenities: {
-        type: [String],
-        default: [],
+      type: [String],
+      default: [],
     },
     operator: {
-        type: String,
-        required: true,
-        trim: true,
+      type: String,
+      required: true,
+      trim: true,
     },
-    busDriver: {
-        type: mongoose.Schema.ObjectId,
-        ref: "drivers",
-        required: true
-    }
-}, { timestamps: true });
+    busDriverId: {
+      type: mongoose.Schema.ObjectId,
+      ref: "drivers",
+      required: true,
+    },
+  },
+  { timestamps: true },
+);
 
-export const BusModel = new model('Bus', busSchema);
+export const BusModel = new model("Bus", busSchema);

@@ -38,7 +38,6 @@ export function SearchForm(){
           "http://localhost:3000/api/city/viewcity"
         );
         setCity(response.data.city[0].cityName);
-        console.log(response.data.city);
       } catch (error) {
         console.log((error as Error).message);
       }

@@ -3,7 +3,7 @@ import { BusModel } from "../models/bus.js"
 export async function HandleSpecificBus(req, res) {
     const { id } = req.params
     try {
-        const bus = await BusModel.findById(id).populate("busDriver")
+        const bus = await BusModel.findById(id).populate("busDriverId")
         return res.status(200).json({ bus: bus })
     } catch (error) {
         return res.status(400).json({ data: "we cant provide this city details" })

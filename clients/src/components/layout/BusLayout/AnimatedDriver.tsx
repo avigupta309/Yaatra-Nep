@@ -16,7 +16,7 @@ const AnimatedDriver = ({ busFeatures }: AnimatedDriverProps) => {
           <div>
             <p className="font-semibold text-gray-800">
               {/* {busFeatures.busDriver?.driverName} */}
-              {busFeatures?.busDriver.driverName}
+              {busFeatures?.busDriverId.driverName}
             </p>
             <p className="text-sm text-gray-600">Professional Driver</p>
             <div className="flex items-center mt-1">

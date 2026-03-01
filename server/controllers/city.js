@@ -21,7 +21,6 @@ export async function HandleCityAdded({ source, destination }) {
             { upsert: true }
         );
 
-        console.log("Cities saved successfully");
     } catch (error) {
         console.error("Error adding cities:", error);
     }

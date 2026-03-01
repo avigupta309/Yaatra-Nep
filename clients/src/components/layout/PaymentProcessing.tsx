@@ -8,7 +8,6 @@ import { toast, ToastContainer } from "react-toastify";
 const PaymentProcessing: React.FC = () => {
   const [screenshot, setScreenshot] = useState<File | null>(null);
   const { userInfo } = useAuth();
-  console.log(userInfo)
   const navigate = useNavigate();
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +30,6 @@ const PaymentProcessing: React.FC = () => {
       );
       toast.success("Wow Payment Sucessfull !!");
       navigate("/");
-      console.log(response.data);
     } catch (error) {}
   };
 

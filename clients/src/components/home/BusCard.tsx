@@ -114,6 +114,7 @@ export function BusCard({ viewMore, setStopView }: viewMoreProps) {
             {/* Amenities */}
             <div className="flex flex-wrap gap-2 mb-3">
               {busItem.amenities.slice(0, 4).map((amenity, idx) => (
+                
                 <div
                   key={idx}
                   className="flex items-center space-x-1 text-xs text-gray-600 bg-gray-50 px-2 py-1 rounded"

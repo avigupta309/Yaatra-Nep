@@ -93,7 +93,7 @@ export interface BusFeatures {
 
 export interface BusInfo {
   _id: string;
-  busDriver: { driverName: string; email: string };
+  busDriverId: { driverName: string; email: string };
   lattitude: number;
   longititude: number;
   rating: number;

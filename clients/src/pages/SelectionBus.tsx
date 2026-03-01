@@ -19,7 +19,6 @@ const SelectionBus: React.FC = () => {
         const response = await axios.get(
           `http://localhost:3000/api/bus/specificbus/${id}`
         );
-        console.log(response.data.bus)
         setBusFeatures(response.data.bus);
       } catch (error) {
         console.log((error as Error).message);

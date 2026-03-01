@@ -14,7 +14,6 @@ export async function handleBookedTiicket(req, res) {
 
 export async function viewTicketDetails(req, res) {
   const {  userEmail } = req.body;
-  console.log(userEmail);
   const response = await BookingModel.find({ useremail: userEmail }).populate("busId");
   return res
     .status(201)

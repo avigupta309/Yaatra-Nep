@@ -35,10 +35,10 @@ const BusModal = ({
                     <div>
                       <p className="text-sm font-medium">Driver</p>
                       <p className="text-sm text-gray-600">
-                        {busFeatures?.busDriver.driverName}
+                        {busFeatures?.busDriverId.driverName}
                       </p>
                       <p className="text-sm text-gray-500 relative ">
-                        {busFeatures?.busDriver.email}
+                        {busFeatures?.busDriverId.email}
                       </p>
                     </div>
                   </div>
