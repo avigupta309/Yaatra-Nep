@@ -79,7 +79,7 @@ export const SelectedBus = () => {
                 <div className="flex justify-between">
                   <span className="text-gray-500">Seat Fare</span>
                   <span className="font-semibold">
-                    ₹ {ticket.busId.farePerSeat}
+                    NPR {ticket.busId.farePerSeat}
                   </span>
                 </div>
 

@@ -9,39 +9,47 @@ function capitalizeWords(str) {
         .map(w => w.charAt(0).toUpperCase() + w.slice(1))
         .join(' ');
 }
-const driverSchema = new Schema({
+const driverSchema = new Schema(
+  {
     driverName: {
-        type: String,
-        required: true,
-        trim: true,
-        set: capitalizeWords,
+      type: String,
+      required: true,
+      trim: true,
+      set: capitalizeWords,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
     },
     phoneNumber: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
     },
     address: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
     },
     password: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     salt: {
-        type: String,
-        trim: true
-    }
-}, { timestamps: true });
+      type: String,
+      trim: true,
+    },
+    role: {
+      type: String,
+      enum: ["admin", "user", "driver", "operator"],
+      default: "driver",
+    },
+  },
+  { timestamps: true },
+);
 
 
 driverSchema.pre("save", function (next) {

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AdminDashboard } from "../components/Admin/AdminDashBoard";
 import { useAuth } from "../hooks/Auth";
 import axios from "axios";
+import { UserDashboard } from "../components/User/UserDashboard";
 
 export function AdminSettingsPage() {
   const [userRole, setUserRole] = useState<string>("user");
@@ -19,5 +20,5 @@ export function AdminSettingsPage() {
     }
     fetchUserRole();
   }, [userId]);
-  return <div>{userRole == "user" ? "" : <AdminDashboard />}</div>;
+  return <div>{userRole == "user" ? <UserDashboard/> : <AdminDashboard />}</div>;
 }

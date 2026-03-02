@@ -89,7 +89,7 @@ export function BusCard({ viewMore, setStopView }: viewMoreProps) {
 
               <div className="text-right">
                 <div className="text-2xl font-bold text-gray-900">
-                  ₹ {busItem.farePerSeat}
+                  NPR {busItem.farePerSeat}
                 </div>
                 <div className="text-sm text-gray-600">per seat</div>
               </div>
@@ -114,7 +114,6 @@ export function BusCard({ viewMore, setStopView }: viewMoreProps) {
             {/* Amenities */}
             <div className="flex flex-wrap gap-2 mb-3">
               {busItem.amenities.slice(0, 4).map((amenity, idx) => (
-                
                 <div
                   key={idx}
                   className="flex items-center space-x-1 text-xs text-gray-600 bg-gray-50 px-2 py-1 rounded"
@@ -136,7 +135,9 @@ export function BusCard({ viewMore, setStopView }: viewMoreProps) {
               <span className="px-2 py-1 rounded bg-gray-200 text-gray-800 text-xs">
                 {busItem.availableSeats}
               </span>
-              <span className="text-sm text-gray-500">{busItem.totalSeats}</span>
+              <span className="text-sm text-gray-500">
+                {busItem.totalSeats}
+              </span>
             </div>
           </div>
 

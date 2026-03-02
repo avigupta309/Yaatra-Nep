@@ -1,8 +1,6 @@
 import { BusModel } from "../models/bus.js";
 import { DriverModel } from "../models/Drivers.js";
 import { HandleCityAdded } from "./city.js";
-// import { generateSeatLayout } from "./generateSeatLayout.js";
-
 export async function HandleBusSubmitData(req, res) {
   let {
     busName,
@@ -25,6 +23,7 @@ export async function HandleBusSubmitData(req, res) {
       .split(",")
       .map((item) => item.trim().replace(/^"|"$/g, ""));
   }
+  console.log(driverEmail)
   const driverDocs = await DriverModel.findOne({ email: driverEmail });
   if (!driverDocs)
     return res.status(400).json({ data: "Enter Valid Driver Email" });
@@ -41,12 +40,9 @@ export async function HandleBusSubmitData(req, res) {
       departureTime,
       arrivalTime,
       farePerSeat,
-      // totalSeats,
-      // availableSeats,
       amenities,
       operator,
       busDriverId,
-      // seatLayout,
     });
 
     return res

@@ -29,7 +29,7 @@ export const UserProfile: React.FC = () => {
   const onSubmit = async (data: authProps) => {
     try {
       await axios.put(`http://localhost:3000/api/user/channgepwd/`, data);
-      alert("Profile updated successfully ✅");
+      alert("Profile updated successfully ");
     } catch (error) {
       console.error(error);
     }
@@ -110,9 +110,11 @@ export const UserProfile: React.FC = () => {
               <label className="block font-medium mb-1">Full Name</label>
               <input
                 type="text"
+                readOnly
                 {...register("fullName", {
                   required: "Full name is required",
                 })}
+
                 className="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none"
               />
               {errors.fullName && (
