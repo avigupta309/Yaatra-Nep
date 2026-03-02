@@ -1,4 +1,5 @@
 import { Router } from "express";
+import multer from 'multer'
 import {
   HandleUserDelete,
   changePassword,
@@ -10,6 +11,9 @@ import {
   ViewOneUSer,
 } from "../controllers/user.js";
 
+const storage = multer.memoryStorage()
+const upload = multer({ storage })
+
 export const UserRouter = Router();
 
 UserRouter.post("/login", HandleLogin);
@@ -18,5 +22,9 @@ UserRouter.post("/specificuser", HandleUserInfo);
 UserRouter.put("/channgepwd", changePassword);
 UserRouter.delete("/userdelete", HandleUserDelete);
 UserRouter.get("/viewuser", viewAllUser);
-UserRouter.put("/changerole/:id", handleChangeRole);
+UserRouter.put(
+  "/changerole/:id",
+  upload.single("profilePic"),
+  handleChangeRole,
+);
 UserRouter.get("/viewoneuser/:id", ViewOneUSer);

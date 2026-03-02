@@ -1,6 +1,6 @@
 import { userModel } from "../models/users.js";
 import { createToken } from "../service/user.js";
-import { createHmac, randomBytes } from "crypto";
+import { UploadImage } from "../UploadImage.js";
 
 export async function HandleUserSignUp(req, res) {
   const { fullName, email, phoneNumber, password, role } = req.body;
@@ -42,6 +42,7 @@ export async function HandleLogin(req, res) {
         email: user.email,
         role: user.role,
         phone: user.phoneNumber,
+        profileImage: user.profileImage,
       },
     });
   } catch (error) {
@@ -64,7 +65,6 @@ export async function HandleUserInfo(req, res) {
 
 export async function changePassword(req, res) {
   const { email, password, newPassword } = req.body;
-
   try {
     const user = await userModel.findOne({ email });
     if (!user) return res.status(400).json({ data: "Enter Valid Email" });
@@ -118,15 +118,14 @@ export async function viewAllUser(req, res) {
 
 export async function handleChangeRole(req, res) {
   const { id } = req.params;
-  console.log("userId-----", id);
   const { email, role, fullName, phoneNumber } = req.body;
-  console.log(req.body);
+  const profileImage = await UploadImage(req);
   try {
     const user = await userModel.findOne({ email: email });
     if (!user) return res.status(401).json({ data: "plz Enter Valid Email" });
     const updatedUser = await userModel.findByIdAndUpdate(
       id,
-      { role, fullName, phoneNumber, email },
+      { role, fullName, phoneNumber, email, profileImage },
       { new: true, runValidators: true },
     );
     return res.status(201).json({ data: updatedUser });

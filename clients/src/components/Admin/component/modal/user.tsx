@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Save, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 interface ModalProps {
@@ -16,22 +16,13 @@ interface userProps {
   profilePic: FileList;
 }
 
-interface UserFormInputs {
-  fullName: string;
-  phoneNumber: string;
-  role: string;
-  profilePic: FileList;
-  email: string;
-}
-
 export function UserModal({ closeModal, userId }: ModalProps) {
-  const [user, setUser] = useState<userProps>();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<UserFormInputs>();
+  } = useForm<userProps>();
 
   useEffect(() => {
     async function fetchUser() {
@@ -39,29 +30,38 @@ export function UserModal({ closeModal, userId }: ModalProps) {
         `http://localhost:3000/api/user/viewoneuser/${userId}`,
       );
       const userData = response.data.data;
-      setUser(userData);
       reset({
         email: userData.email,
         fullName: userData.fullName,
         phoneNumber: userData.phoneNumber,
         role: userData.role,
-        profilePic: userData.profilePic,
       });
     }
 
     fetchUser();
   }, [userId, reset]);
 
-  const onSubmit = async (data: UserFormInputs) => {
-
+  const onSubmit = async (data: userProps) => {
+    const formData = new FormData();
+    formData.append("email", data.email);
+    formData.append("phoneNumber", data.phoneNumber);
+    formData.append("role", data.role);
+    formData.append("fullName", data.fullName);
+    if (data.profilePic && data.profilePic.length > 0) {
+      formData.append("profilePic", data.profilePic[0]);
+    } else {
+      console.log("No image selected");
+    }
+    console.log(data)
     try {
       const response = await axios.put(
         `http://localhost:3000/api/user/changerole/${userId}`,
-        data,
+        formData,
       );
+      console.log(response.data);
     } catch (error) {}
 
-    reset();
+    // reset();
   };
 
   return (

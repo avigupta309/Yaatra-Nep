@@ -16,7 +16,6 @@ interface authProps {
 export const UserProfile: React.FC = () => {
   const { authUser } = useAuth();
   const userId = authUser?.id;
-
   const [profileImage, setProfileImage] = useState<string | null>(null);
 
   const {
@@ -45,13 +44,14 @@ export const UserProfile: React.FC = () => {
         );
 
         const userData = response.data.data;
+        setProfileImage(userData.profileImage);
+
 
         reset({
           fullName: userData.fullName,
           email: userData.email,
         });
 
-        setProfileImage(userData.profilePic);
       } catch (error) {
         console.error(error);
       }
@@ -72,40 +72,39 @@ export const UserProfile: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-4">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
-        {/* LEFT: PROFILE CARD */}
         <div className="bg-white rounded-2xl shadow-xl p-8">
-          {/* Profile Header */}
-          <div className="flex flex-col items-center text-center mb-6">
-            <label
-              htmlFor="image-upload"
-              className="relative cursor-pointer group"
-            >
-              <img
-                src={profileImage || "/default-avatar.png"}
-                alt="Profile"
-                className="w-32 h-32 rounded-full object-cover border-4 border-indigo-100 shadow-md"
-              />
-              <div className="absolute bottom-2 right-2 bg-indigo-600 text-white rounded-full p-2 shadow-md group-hover:scale-110 transition">
-                <Camera size={16} />
-              </div>
-            </label>
-
-            <input
-              type="file"
-              id="image-upload"
-              accept="image/*"
-              className="hidden"
-              {...register("profilePic")}
-              onChange={handleImageChange}
-            />
-
-            <h2 className="text-2xl font-bold mt-4 text-gray-800">
-              {authUser?.fullName}
-            </h2>
-            <p className="text-gray-500 text-sm">{authUser?.email}</p>
-          </div>
-
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="flex flex-col items-center text-center mb-6">
+              <label
+                htmlFor="image-upload"
+                className="relative cursor-pointer group"
+              >
+                <img
+                  src={profileImage || "/default-avatar.png"}
+                  alt="Profile"
+                  className="w-32 h-32 rounded-full object-cover border-4 border-indigo-100 shadow-md"
+                />
+                <div className="absolute bottom-2 right-2 bg-indigo-600 text-white rounded-full p-2 shadow-md group-hover:scale-110 transition">
+                  <Camera size={16} />
+                </div>
+              </label>
+
+              <input
+                type="file"
+                id="image-upload"
+                accept="image/*"
+                className="hidden"
+                {...register("profilePic", {
+                  onChange: handleImageChange,
+                })}
+              />
+
+              <h2 className="text-2xl font-bold mt-4 text-gray-800">
+                {authUser?.fullName}
+              </h2>
+              <p className="text-gray-500 text-sm">{authUser?.email}</p>
+            </div>
+
             <div>
               <label className="block font-medium mb-1">Full Name</label>
               <input
@@ -114,7 +113,6 @@ export const UserProfile: React.FC = () => {
                 {...register("fullName", {
                   required: "Full name is required",
                 })}
-
                 className="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none"
               />
               {errors.fullName && (
