@@ -1,4 +1,5 @@
 import { DriverModel } from "../models/Drivers.js";
+import { UploadImage } from "../upload/UploadImage.js";
 
 export async function HandleDriverSignUp(req, res) {
   const { driverName, email, phoneNumber, address, password } = req.body;
@@ -44,16 +45,17 @@ export async function HandleDriverLogin(req, res) {
 }
 
 export async function HandleDriverEdit(req, res) {
-  const { email, driverName, password, address, phoneNumber } = req.body;
+  const { email, driverName, phoneNumber } = req.body;
   const driverExist = await DriverModel.findOne({ email: email });
   if (!driverExist)
     return res.status(401).json({ data: "Driver Email is Not Registered" });
+  if (req.file) {
+    driverExist.profileImage = await UploadImage(req);
+  }
+  driverExist.driverName = driverName;
+  driverExist.phoneNumber = phoneNumber;
   try {
-    const updateDriverData = await DriverModel.findOneAndUpdate(
-      { email },
-      { driverName, password, address, phoneNumber },
-      { new: true },
-    );
+    const updateDriverData = await driverExist.save();
     return res.status(201).json({
       data: "Driver Data Updated Sucessfully",
       driver: updateDriverData,

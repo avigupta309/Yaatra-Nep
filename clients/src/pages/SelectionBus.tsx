@@ -17,9 +17,10 @@ const SelectionBus: React.FC = () => {
     async function FetchingCityDetails() {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/bus/specificbus/${id}`
+          `http://localhost:3000/api/bus/specificbus/${id}`,
         );
         setBusFeatures(response.data.bus);
+        console.log(response.data);
       } catch (error) {
         console.log((error as Error).message);
       }
@@ -43,7 +44,7 @@ const SelectionBus: React.FC = () => {
             <BusExterior busFeatures={busFeatures} />
 
             {/* Bus Interior */}
-            <BusInterior />
+            <BusInterior busFeatures={busFeatures} />
 
             {/* Animated Driver */}
             <AnimatedDriver busFeatures={busFeatures} />

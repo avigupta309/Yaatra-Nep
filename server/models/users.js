@@ -66,7 +66,7 @@ userSchema.methods.matchPassword = function (typePassword) {
     .digest("hex");
   const isValidUser = UserHashPassword === user.password;
   if (!isValidUser) {
-    throw new Error("Invalid password");
+    throw new Error("Old Password Not Match");
   }
 
   return user;

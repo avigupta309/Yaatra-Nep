@@ -1,6 +1,6 @@
 import { userModel } from "../models/users.js";
 import { createToken } from "../service/user.js";
-import { UploadImage } from "../UploadImage.js";
+import { UploadImage } from "../upload/UploadImage.js";
 
 export async function HandleUserSignUp(req, res) {
   const { fullName, email, phoneNumber, password, role } = req.body;
@@ -23,7 +23,7 @@ export async function HandleUserSignUp(req, res) {
     console.log("cannot signup", error.message);
     return res
       .status(400)
-      .json({ data: "Cannot Signup the user or check your number!" });
+      .json({ data: "Cannot Signup because phoneNumber already exist" });
   }
 }
 
@@ -68,7 +68,6 @@ export async function changePassword(req, res) {
   try {
     const user = await userModel.findOne({ email });
     if (!user) return res.status(400).json({ data: "Enter Valid Email" });
-
     user.matchPassword(password);
 
     if (password === newPassword) {
@@ -78,6 +77,12 @@ export async function changePassword(req, res) {
     }
 
     user.password = newPassword.trim();
+    if (req.file) {
+      const profileImage = await UploadImage(req);
+      if (profileImage && profileImage !== "Image upload failed") {
+        user.profileImage = profileImage;
+      }
+    }
 
     await user.save();
 

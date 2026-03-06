@@ -70,6 +70,7 @@ export function Bus() {
             }}
             busId={busId}
           />
+
         )}
       </div>
     </div>

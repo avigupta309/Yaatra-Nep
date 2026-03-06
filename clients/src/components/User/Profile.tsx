@@ -4,6 +4,7 @@ import { useAuth } from "../../hooks/Auth";
 import { SelectedBus } from "./selectedBus";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { toast} from "react-toastify";
 
 interface authProps {
   fullName: string;
@@ -22,15 +23,26 @@ export const UserProfile: React.FC = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<authProps>();
 
   const onSubmit = async (data: authProps) => {
+    const formData = new FormData();
+    formData.append("fullName", data.fullName);
+    formData.append("email", data.email);
+    formData.append("newPassword", data.newPassword);
+    formData.append("password", data.password);
+    if (data.profilePic && data.profilePic.length > 0) {
+      formData.append("profilePic", data.profilePic[0]);
+    } else {
+      console.log("No image selected");
+    }
     try {
-      await axios.put(`http://localhost:3000/api/user/channgepwd/`, data);
-      alert("Profile updated successfully ");
-    } catch (error) {
-      console.error(error);
+      await axios.put(`http://localhost:3000/api/user/channgepwd/`, formData);
+      toast.success("Your profile has been updated successfully.");
+    } catch (error: any) {
+      const errorMessage = error.response.data.data;
+      toast.error(errorMessage);
     }
   };
 
@@ -46,12 +58,10 @@ export const UserProfile: React.FC = () => {
         const userData = response.data.data;
         setProfileImage(userData.profileImage);
 
-
         reset({
           fullName: userData.fullName,
           email: userData.email,
         });
-
       } catch (error) {
         console.error(error);
       }
@@ -179,10 +189,20 @@ export const UserProfile: React.FC = () => {
             {/* Save Button */}
             <button
               type="submit"
+              disabled={isSubmitting}
               className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition mt-4"
             >
-              <Save size={18} />
-              Save Changes
+              {isSubmitting ? (
+                <div className="flex items-center justify-center">
+                  <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+                  Signing In...
+                </div>
+              ) : (
+                <div className="flex items-center justify-center">
+                  <Save size={18} />
+                  Save Changes
+                </div>
+              )}
             </button>
           </form>
         </div>

@@ -1,13 +1,13 @@
 import { Schema, model, set } from "mongoose";
-import { createHmac, randomBytes } from 'crypto'
+import { createHmac, randomBytes } from "crypto";
 
 function capitalizeWords(str) {
-    return str
-        .trim()
-        .toLowerCase()
-        .split(' ')
-        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(' ');
+  return str
+    .trim()
+    .toLowerCase()
+    .split(" ")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
 }
 const driverSchema = new Schema(
   {
@@ -47,29 +47,35 @@ const driverSchema = new Schema(
       enum: ["admin", "user", "driver", "operator"],
       default: "driver",
     },
+    profileImage: {
+      type: String,
+      trim: true,
+    },
   },
   { timestamps: true },
 );
 
-
 driverSchema.pre("save", function (next) {
-    const driver = this;
-    if (!driver.isModified("password")) return next()
-    const salt = randomBytes(16).toString("hex")
-    const hashPassword = createHmac("sha256", salt).update(driver.password).digest("hex");
-    driver.password = hashPassword;
-    driver.salt = salt
-    return next()
-
-})
+  const driver = this;
+  if (!driver.isModified("password")) return next();
+  const salt = randomBytes(16).toString("hex");
+  const hashPassword = createHmac("sha256", salt)
+    .update(driver.password)
+    .digest("hex");
+  driver.password = hashPassword;
+  driver.salt = salt;
+  return next();
+});
 
 driverSchema.methods.matchPassword = function (typePassword) {
-    const driver = this
-    const salt = driver.salt
-    const userHash = createHmac("sha256", salt).update(typePassword).digest("hex");
-    const driverVerified = userHash === driver.password
-    if (!driverVerified) throw new Error("Driver's Password Not Match")
-    return driver
-}
+  const driver = this;
+  const salt = driver.salt;
+  const userHash = createHmac("sha256", salt)
+    .update(typePassword)
+    .digest("hex");
+  const driverVerified = userHash === driver.password;
+  if (!driverVerified) throw new Error("Driver's Password Not Match");
+  return driver;
+};
 
-export const DriverModel = model("drivers", driverSchema)
+export const DriverModel = model("drivers", driverSchema);

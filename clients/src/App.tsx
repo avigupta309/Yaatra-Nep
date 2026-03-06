@@ -11,13 +11,13 @@ import { useAuth } from "./hooks/Auth";
 import { ToastContainer } from "react-toastify";
 import { UserProfile } from "./components/User/Profile";
 import { AdminSettingsPage } from "./pages/SettingPage";
-// import { UserModal } from "./components/Admin/component/modal/user";
 
 function App() {
   const { logged } = useAuth();
   useCheckAuth();
   return (
     <BrowserRouter>
+      <ToastContainer draggable />
       <div className="min-h-screen bg-gray-50">
         <Header />
         <main>
@@ -36,15 +36,18 @@ function App() {
             />
             <Route path="/about-us" element={<AboutPage />} />
 
-            {/* <Route path="/edituser/:id" element={<UserModal/>} /> */}
+            <Route
+              path="/profile"
+              element={logged ? <UserProfile />:<LoginPage/>}
+            />
 
-            <Route path="/profile" element={<UserProfile />} />
-
-            <Route path="/settings" element={logged?<AdminSettingsPage />:<LoginPage/>} />
+            <Route
+              path="/settings"
+              element={logged ? <AdminSettingsPage /> : <LoginPage />}
+            />
           </Routes>
         </main>
       </div>
-      <ToastContainer />
     </BrowserRouter>
   );
 }

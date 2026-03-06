@@ -1,4 +1,5 @@
 import mongoose, { Schema, model } from "mongoose";
+import { type } from "os";
 
 function capitalizeWords(str) {
   return str
@@ -94,6 +95,14 @@ const busSchema = new Schema(
       type: mongoose.Schema.ObjectId,
       ref: "drivers",
       required: true,
+    },
+    exteriorPic: {
+      type: String,
+      trim: true,
+    },
+    interiorPic: {
+      type: String,
+      trim: true,
     },
   },
   { timestamps: true },

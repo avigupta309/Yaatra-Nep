@@ -3,7 +3,7 @@ import { Upload, CheckCircle2, BusFront } from "lucide-react";
 import { useAuth } from "../../hooks/Auth";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 const PaymentProcessing: React.FC = () => {
   const [screenshot, setScreenshot] = useState<File | null>(null);
@@ -24,13 +24,15 @@ const PaymentProcessing: React.FC = () => {
     }
 
     try {
-      const response = await axios.post(
-        `http://localhost:3000/api/bookedticket`,
-        userInfo,
-      );
+      await axios.post(`http://localhost:3000/api/bookedticket`, userInfo);
       toast.success("Wow Payment Sucessfull !!");
-      navigate("/");
-    } catch (error) {}
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    } catch (error:any) {
+      toast.error("Something went wrong during payment");
+      console.log(error.message)
+    }
   };
 
   return (
@@ -129,7 +131,6 @@ const PaymentProcessing: React.FC = () => {
           </button>
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 };

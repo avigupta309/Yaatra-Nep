@@ -93,7 +93,7 @@ export interface BusFeatures {
 
 export interface BusInfo {
   _id: string;
-  busDriverId: { driverName: string; email: string };
+  busDriverId: { driverName: string; email: string; profileImage: string };
   lattitude: number;
   longititude: number;
   rating: number;
@@ -110,6 +110,8 @@ export interface BusInfo {
   arrivalTime: string;
   type: string;
   amenities: string[];
+  interiorPic: string;
+  exteriorPic: string;
 }
 
 // export interface bookedTicket {

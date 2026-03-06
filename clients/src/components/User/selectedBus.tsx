@@ -106,7 +106,7 @@ export const SelectedBus = () => {
 
                 <div className="border-t pt-4 flex justify-between items-center">
                   <span className="text-lg font-bold text-green-600">
-                    Total: ₹ {totalPrice}
+                    Total: NPR {totalPrice}
                   </span>
 
                   <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm">

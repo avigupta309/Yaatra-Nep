@@ -2,6 +2,7 @@ import axios from "axios";
 import { Save, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 interface ModalProps {
   closeModal: () => void;
@@ -22,7 +23,7 @@ export function DriverModal({ closeModal, driverId }: ModalProps) {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<driverProps>();
 
   useEffect(() => {
@@ -43,15 +44,27 @@ export function DriverModal({ closeModal, driverId }: ModalProps) {
   }, [driverId, reset]);
 
   const onSubmit = async (data: driverProps) => {
-
+    console.log(data);
+    const formData = new FormData();
+    formData.append("driverName", data.driverName);
+    formData.append("email", data.email);
+    formData.append("phoneNumber", data.phoneNumber);
+    if (data.profilePic && data.profilePic.length > 0) {
+      formData.append("profilePic", data.profilePic[0]);
+    } else {
+      console.log("No image selected");
+    }
     try {
-      const response = await axios.put(
-        `http://localhost:3000/api/user/changerole/${driverId}`,
-        data,
+      await axios.put(
+        `http://localhost:3000/api/driver/handledriveredit`,
+        formData,
       );
-    } catch (error) {}
+      toast.success("Sucessfully updated Driver info...");
+    } catch (error) {
+      toast.error("Something Went Wrong");
+    }
 
-    reset();
+    // reset();
   };
 
   return (
@@ -121,12 +134,22 @@ export function DriverModal({ closeModal, driverId }: ModalProps) {
 
             <button
               type="submit"
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+              disabled={isSubmitting}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition disabled:opacity-60"
             >
-              <span className="flex">
-                Save
-                <Save />
-              </span>
+              {isSubmitting ? (
+                <div className="flex items-center justify-center">
+                  <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+                  Updating...
+                </div>
+              ) : (
+                <div className="flex items-center justify-center">
+                  <span className="flex">
+                    Save
+                    <Save />
+                  </span>
+                </div>
+              )}
             </button>
           </div>
         </form>

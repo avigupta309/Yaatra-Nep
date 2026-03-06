@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { Bus, Eye, EyeOff, LogIn } from "lucide-react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../hooks/Auth";
 interface LoginFormData {
   email: string;
@@ -26,7 +26,7 @@ export const LoginPage: React.FC = () => {
       const response = await axios.post(
         "http://localhost:3000/api/user/login",
         data,
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setAuthUser(response.data.user);
       toast.success(`Login Sucessfully mr/ms ${response.data.user?.fullName}`);
@@ -34,7 +34,6 @@ export const LoginPage: React.FC = () => {
         setLogged(true);
         navigate("/");
       }, 1000);
-
     } catch (error: any) {
       toast.error(error?.response.data.data || "wrong password");
     }

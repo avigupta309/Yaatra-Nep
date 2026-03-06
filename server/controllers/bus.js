@@ -1,5 +1,6 @@
 import { BusModel } from "../models/bus.js";
 import { DriverModel } from "../models/Drivers.js";
+import { UploadTwoBusImages } from "../upload/BusImages.js";
 import { HandleCityAdded } from "./city.js";
 export async function HandleBusSubmitData(req, res) {
   let {
@@ -23,12 +24,11 @@ export async function HandleBusSubmitData(req, res) {
       .split(",")
       .map((item) => item.trim().replace(/^"|"$/g, ""));
   }
-  console.log(driverEmail)
+  console.log(driverEmail);
   const driverDocs = await DriverModel.findOne({ email: driverEmail });
   if (!driverDocs)
     return res.status(400).json({ data: "Enter Valid Driver Email" });
   const busDriverId = driverDocs._id;
- 
 
   try {
     await BusModel.create({
@@ -78,6 +78,15 @@ export async function HandleBusInfo(req, res) {
 }
 
 export async function HandleBusEdit(req, res) {
+  const busData = JSON.parse(req.body.busData);
+  const exteriorFile = req.files.exteriorPic?.[0] || null;
+  const interiorFile = req.files.interiorPic?.[0] || null;
+  const { exteriorPic, interiorPic } = await UploadTwoBusImages(
+    exteriorFile,
+    interiorFile,
+  );
+  // if (exteriorPic) busData.exteriorPic = exteriorPic;
+  // if (interiorPic) busData.interiorPic = interiorPic;
   let {
     busName,
     busNumber,
@@ -91,39 +100,45 @@ export async function HandleBusEdit(req, res) {
     availableSeats,
     amenities,
     operator,
-    busDriver,
-  } = req.body;
+    busDriverId,
+    longitude,
+    latitude,
+  } = busData;
   const busExist = await BusModel.findOne({ busNumber: busNumber });
   if (!busExist)
     return res.status(404).json({ data: "Bus Not Found In data-Base" });
-  const driverDocs = await DriverModel.findOne({ email: busDriver });
+  const driverEmail = busDriverId.email;
+  const driverDocs = await DriverModel.findOne({ email: driverEmail });
   if (!driverDocs)
     return res.status(400).json({ data: "Enter valid Driver Email" });
-  busDriver = driverDocs._id;
+
+  busDriverId = driverDocs._id;
+  console.log("driverId = =", busDriverId);
   if (typeof amenities === "string") {
     amenities = amenities
       .split(",")
       .map((item) => item.trim().replace(/^"|"$/g, ""));
   }
+  HandleCityAdded({ source, destination });
+
   try {
-    const updatedData = await BusModel.findOneAndUpdate(
-      { busNumber },
-      {
-        busName,
-        type,
-        source,
-        destination,
-        departureTime,
-        arrivalTime,
-        farePerSeat,
-        totalSeats,
-        availableSeats,
-        amenities,
-        operator,
-        busDriver,
-      },
-      { new: true },
-    );
+    busExist.busName = busName;
+    busExist.type = type;
+    busExist.source = source;
+    busExist.destination = destination;
+    busExist.departureTime = departureTime;
+    busExist.arrivalTime = arrivalTime;
+    busExist.farePerSeat = farePerSeat;
+    busExist.totalSeats = totalSeats;
+    busExist.availableSeats = availableSeats;
+    busExist.amenities = amenities;
+    busExist.operator = operator;
+    busExist.busDriver = busDriverId;
+    busExist.longitude = longitude;
+    busExist.latitude = latitude;
+    busExist.interiorPic = interiorPic;
+    busExist.exteriorPic = exteriorPic;
+    const updatedData = await busExist.save();
     return res
       .status(201)
       .json({ data: "Bus Data Updated sucessfully", bus: updatedData });

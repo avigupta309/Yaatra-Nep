@@ -1,21 +1,21 @@
 import { Save, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { BusFormInputs } from "../../../../types/busform";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import axios from "axios";
-import { BusInfo } from "../../../../types";
+
+import { toast } from "react-toastify";
 interface ModalProps {
   viewModal: () => void;
   busId: string;
 }
 
 export function BusModal({ viewModal, busId }: ModalProps) {
-  const [bus, setBus] = useState<BusInfo>();
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<BusFormInputs>();
 
   useEffect(() => {
@@ -25,30 +25,7 @@ export function BusModal({ viewModal, busId }: ModalProps) {
           `http://localhost:3000/api/bus/specificbus/${busId}`,
         );
         const busData = response.data.bus;
-        setBus(busData)
-       reset({
-         busName: busData.busName,
-         busNumber: busData.busNumber,
-         latitude: busData.latitude,
-         longitude: busData.longitude,
-         type: busData.type,
-         source: busData.source,
-         destination: busData.destination,
-         departureTime: busData.departureTime,
-         arrivalTime: busData.arrivalTime,
-         farePerSeat: busData.farePerSeat,
-         totalSeats: busData.totalSeats,
-
-         // convert array → string for input
-         amenities: busData.amenities?.join(", "),
-
-         operator: busData.operator,
-
-         driverName: busData.busDriverId.driverName,
-         driverPhoneNumber: busData.busDriverId.phoneNumber,
-         driverAddress: busData.busDriverId.address,
-         busDriver: busData.busDriverId.email,
-       });
+        reset(busData);
       } catch (error) {}
     }
     FetchBus();
@@ -58,21 +35,25 @@ export function BusModal({ viewModal, busId }: ModalProps) {
     "w-full border rounded-lg px-4 py-3 pr-10 focus:ring-2 focus:ring-blue-500 outline-none";
 
   const onSubmit = async (data: BusFormInputs) => {
-
+    console.log(data)
+    const formData = new FormData();
+    formData.append("busData", JSON.stringify(data));
+    if (data.exteriorPic) {
+      formData.append("exteriorPic", data.exteriorPic[0]);
+    }
+    if (data.interiorPic) {
+      formData.append("interiorPic", data.interiorPic[0]);
+    }
     try {
       const response = await axios.put(
         "http://localhost:3000/api/bus/busedit",
-        data,
+        formData,
       );
+      console.log(response.data);
+      toast.success("Bus Updated Sucessfully...");
     } catch (error: any) {
-      console.error(
-        "Error updating bus:",
-        error.response?.data || error.message,
-      );
+      toast.error("Something Went Wrong");
     }
-
-    reset();
-    viewModal();
   };
 
   return (
@@ -243,7 +224,7 @@ export function BusModal({ viewModal, busId }: ModalProps) {
             <div>
               <label className="block mb-1 font-medium">Driver Name</label>
               <input
-                {...register("driverName", { required: true })}
+                {...register("busDriverId.driverName", { required: true })}
                 className={inputFielsStyle}
               />
             </div>
@@ -251,7 +232,7 @@ export function BusModal({ viewModal, busId }: ModalProps) {
               <label className="block mb-1 font-medium">Driver Email</label>
               <input
                 type="email"
-                {...register("busDriver", { required: true })}
+                {...register("busDriverId.email", { required: true })}
                 className={inputFielsStyle}
               />
             </div>
@@ -259,14 +240,14 @@ export function BusModal({ viewModal, busId }: ModalProps) {
               <label className="block mb-1 font-medium">Driver Phone</label>
               <input
                 type="tel"
-                {...register("driverPhoneNumber", { required: true })}
+                {...register("busDriverId.phoneNumber", { required: true })}
                 className={inputFielsStyle}
               />
             </div>
             <div>
               <label className="block mb-1 font-medium">Driver Address</label>
               <input
-                {...register("driverAddress", { required: true })}
+                {...register("busDriverId.address", { required: true })}
                 className={inputFielsStyle}
               />
             </div>
@@ -283,15 +264,48 @@ export function BusModal({ viewModal, busId }: ModalProps) {
 
             <button
               type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-1"
+              disabled={isSubmitting}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition disabled:opacity-60"
             >
-              Save <Save size={18} />
+              {isSubmitting ? (
+                <div className="flex items-center justify-center">
+                  <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+                  Updating...
+                </div>
+              ) : (
+                <div className="flex items-center justify-center">
+                  <span className="flex">
+                    Save
+                    <Save />
+                  </span>
+                </div>
+              )}
             </button>
+          </div>
+
+          {/* ########### */}
+
+          <div>
+            <label className="block mb-1 font-medium">Interior Photo</label>
+            <input
+              type="file"
+              accept="image/*"
+              className="file-input file-input-bordered w-full"
+              {...register("interiorPic")}
+            />
+          </div>
+          <div>
+            <label className="block mb-1 font-medium">Exterior Photo</label>
+            <input
+              type="file"
+              accept="image/*"
+              className="file-input file-input-bordered w-full"
+              {...register("exteriorPic")}
+            />
           </div>
         </form>
       </div>
 
-      {/* backdrop */}
       <div className="modal-backdrop" onClick={viewModal}></div>
     </div>
   );

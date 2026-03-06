@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { Bus, Eye, EyeOff, UserPlus } from "lucide-react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 interface SignupFormData {
   fullName: string;
@@ -36,17 +36,11 @@ export const SignupPage: React.FC = () => {
     try {
       const response = await axios.post(
         "http://localhost:3000/api/user/usersignup",
-        data
+        data,
       );
 
       setUserSignUp(response.data);
-
-      if (response.status === 409) {
-        toast.info(response.data.data || "Email already exists.");
-      }
-      if (response.status == 400) {
-        toast.error(response.data.data || "Invalid input.");
-      }
+      toast.success("The user account has been created successfully.");
     } catch (error: any) {
       console.error("Signup error:", error);
       toast.error(error.response?.data?.data || "Server error during signup.");

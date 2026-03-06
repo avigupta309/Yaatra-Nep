@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../../hooks/Auth";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast} from "react-toastify";
 
 export function Header() {
   const { logged, theme, setTheme, authUser, setLogged } = useAuth();
@@ -21,6 +21,7 @@ export function Header() {
     await axios.get("http://localhost:3000/api/logout", {
       withCredentials: true,
     });
+  
     toast.error(`Log Out Sucessflly mr/ms ${authUser?.fullName}`);
     setTimeout(() => {
       setLogged(false);
