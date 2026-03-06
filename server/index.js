@@ -40,9 +40,9 @@ app.get("/api/logout", (req, res) => {
   return res.status(200).json({ message: "Logged out" });
 });
 
-// app.listen(port, () => {
-//   console.log(`Server is started at port : ${port}`.bgMagenta);
-// });
+app.listen(port, () => {
+  console.log(`Server is started at port : ${port}`.bgMagenta);
+});
 
 // if (process.env.NODE_ENV !== "production") {
 //   const port = process.env.PORT || 3000;
