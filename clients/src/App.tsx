@@ -11,6 +11,7 @@ import { useAuth } from "./hooks/Auth";
 import { ToastContainer } from "react-toastify";
 import { UserProfile } from "./components/User/Profile";
 import { AdminSettingsPage } from "./pages/SettingPage";
+import { LandingPage } from "./pages/LandingPage";
 
 function App() {
   const { logged } = useAuth();
@@ -22,7 +23,7 @@ function App() {
         <Header />
         <main>
           <Routes>
-            <Route path="/" element={logged ? <HomePage /> : <LoginPage />} />
+            <Route path="/" element={logged ? <HomePage /> : <LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route

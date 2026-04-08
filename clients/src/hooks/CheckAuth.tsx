@@ -11,6 +11,7 @@ export const useCheckAuth = () => {
       const res = await axios.get(`${backUrl}`, {
         withCredentials: true,
       });
+      console.log(res.data.user);
       setAuthUser(res.data.user);
       setLogged(true);
       // eslint-disable-next-line

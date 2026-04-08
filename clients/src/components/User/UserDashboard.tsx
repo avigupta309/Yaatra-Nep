@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
-import { Save, MapPin, Thermometer } from "lucide-react";
+import { Save } from "lucide-react";
+import { Temp } from "../layout/weather/temp";
 
 interface SettingsFormProps {
   fullName: string;
@@ -17,13 +18,7 @@ export const UserDashboard = () => {
   } = useForm<SettingsFormProps>();
 
   const onSubmit = (data: SettingsFormProps) => {
-
-  };
-
-  const weatherData = {
-    location: "Kathmandu",
-    temperature: 26,
-    condition: "Sunny",
+    console.log(data);
   };
 
   return (
@@ -134,29 +129,7 @@ export const UserDashboard = () => {
             </button>
           </form>
         </div>
-
-        {/* RIGHT COLUMN - WEATHER BOX */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 h-fit">
-          <h3 className="text-lg font-semibold text-indigo-600 mb-4">
-            Current Location Weather
-          </h3>
-
-          <div className="flex items-center gap-3 mb-3">
-            <MapPin className="text-indigo-500" />
-            <span className="font-medium">{weatherData.location}</span>
-          </div>
-
-          <div className="flex items-center gap-3 mb-3">
-            <Thermometer className="text-red-500" />
-            <span className="text-2xl font-bold">
-              {weatherData.temperature}°C
-            </span>
-          </div>
-
-          <div className="bg-indigo-100 text-indigo-700 px-3 py-2 rounded-lg text-sm font-medium">
-            {weatherData.condition}
-          </div>
-        </div>
+        <Temp />
       </div>
     </div>
   );

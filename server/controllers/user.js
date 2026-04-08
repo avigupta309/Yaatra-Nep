@@ -33,8 +33,16 @@ export async function HandleLogin(req, res) {
   if (!user) return res.status(404).json({ data: "Email is Not registred" });
   try {
     const isMatchPassword = await user.matchPassword(password);
+    console.log("here match")
+    console.log(isMatchPassword)
     const token = createToken(isMatchPassword);
-    res.cookie("tokenId", token, { httpOnly: true });
+    // res.cookie("tokenId", token, { httpOnly: true });
+    res.cookie("tokenId", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
     return res.status(200).json({
       data: "SignIn Sucessfully ",
       user: {
